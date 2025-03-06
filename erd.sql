@@ -1,3 +1,4 @@
+
 -- 📌 Análisis de Fechas en las Tablas 001_Sales y 002_Date
 SELECT COUNT(DISTINCT [Sales_Date]) AS Total_Sales_Dates FROM [DATAEX].[001_sales];
 SELECT COUNT(DISTINCT [Date]) AS Total_date_dates FROM [DATAEX].[002_date];
@@ -12,7 +13,7 @@ SELECT COUNT(DISTINCT [Sales_Date]) AS dates_comunes FROM [DATAEX].[001_sales] I
 -- 📌 Análisis de Clientes en las Tablas 001_Sales y 003_Cliente
 SELECT COUNT(DISTINCT Customer_ID ) AS total_clientes_ventas FROM [DATAEX].[001_sales];
 SELECT COUNT(DISTINCT Customer_ID) AS total_clientes FROM [DATAEX].[003_clientes] ;
---Ambas tablas tienen la misma cantidad de clientes,44053.
+--Ambas tablas tienen la misma cantidad de clientes,44053 por lo tanto es una relación 1:1.--->PREGUNTAR A JACINTO SI ES CORRECTO
 
 -- 📌 Análisis de revisiones
 SELECT s.code, COUNT(r.code) AS total_revisiones
@@ -27,7 +28,7 @@ FROM [DATAEX].[001_Sales];
 SELECT COUNT(*) AS total_revisiones
 FROM [DATAEX].[004_rev];
 
---Cada venta tiene un regsitros asociado en la tabla 004_rev.
+--Cada venta tiene un regsitros asociado en la tabla 004_rev.-->PREGUNTAR JACINTO SI COMO ES UNO A 1:1 REV NO TIENE PKS
 
 --- 📌 Análisis de Códigos Postales en la Tabla 003_Clientes
 SELECT CODIGO_POSTAL, COUNT(*) AS TOTAL_CLIENTES
@@ -59,19 +60,23 @@ FROM [DATAEX].[006_producto]
 
 -- 📌 Análisis de Quejas en las Tablas 001_Sales y 008_CAC
 
-SELECT * FROM [DATAEX].[001_sales]
-SELECT * FROM [DATAEX].[008_cac]
 
+SELECT count(DISTINCT CODE) FROM [DATAEX].[001_sales] as quejas_ventas
+SELECT count(DISTINCT CODE) FROM [DATAEX].[008_cac]  as quejas 
 
-SELECT count(DISTINCT CODE) FROM [DATAEX].[001_sales] as codigos_ventas
-SELECT count(DISTINCT CODE) FROM [DATAEX].[008_cac] as codigos_cac
+SELECT CODE, COUNT(*) AS total_quejas
+FROM [DATAEX].[008_cac]
+GROUP BY CODE
+ORDER BY total_quejas DESC;
 
-SELECT s.CODE, COUNT(c.CODE) AS total_quejas
+SELECT COUNT(*) AS ventas_sin_queja
 FROM [DATAEX].[001_sales] s
 LEFT JOIN [DATAEX].[008_cac] c ON s.CODE = c.CODE
-GROUP BY s.CODE
-ORDER BY total_quejas desc;
---Cada queja esta asociada a una venta y cada venta esta asociada a una queja, peor hay ventas que no tienen quejas asociadas.
+WHERE c.CODE IS NULL;
+
+
+
+--Cada queja esta asociada a una venta y cada venta esta asociada a una queja.
 
 -- 📌 Análisis de Edad en las Tablas 001_Sales y 018_Edad
 SELECT * FROM [DATAEX].[018_edad]
@@ -99,3 +104,13 @@ select count(DISTINCT CP) AS total_codigos_postales_CP FROM [DATAEX].[005_cp];
 select count(DISTINCT CP) AS total_codigos_postales_mosaic FROM [DATAEX].[019_Mosaic];
 
 --Hay menos coidfos postales en mosci que en clientes 
+
+--
+SELECT COUNT(DISTINCT CODE) AS total_codigos_ventas FROM [DATAEX].[001_sales];
+
+SELECT COUNT(DISTINCT CODE) AS total_codigos_edad FROM [DATAEX].[018_edad];
+
+SELECT code, COUNT(*) AS repeticiones
+FROM [DATAEX].[018_edad]
+GROUP BY code
+ORDER BY repeticiones ASC;
