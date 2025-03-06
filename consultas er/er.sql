@@ -114,3 +114,9 @@ SELECT code, COUNT(*) AS repeticiones
 FROM [DATAEX].[018_edad]
 GROUP BY code
 ORDER BY repeticiones ASC;
+
+---
+SELECT customer_id, COUNT(*) AS total_ventas
+FROM [DATAEX].[001_sales]
+GROUP BY customer_id
+HAVING COUNT(*) > 1;
