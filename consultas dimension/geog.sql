@@ -1,6 +1,6 @@
-Select *  from[DATAEX].[011_tienda]
-select * from [DATAEX].[012_provincia]
-select * from [DATAEX].[013_zona]
+--Select *  from[DATAEX].[011_tienda]
+--select * from [DATAEX].[012_provincia]
+--select * from [DATAEX].[013_zona]
 
 
 
