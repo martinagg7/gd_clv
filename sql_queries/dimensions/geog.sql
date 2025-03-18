@@ -18,7 +18,6 @@ FROM [DATAEX].[011_tienda] as tienda
 LEFT JOIN [DATAEX].[012_provincia] as provincia 
     ON tienda.PROVINCIA_ID = provincia.PROVINCIA_ID
 LEFT JOIN [DATAEX].[013_zona] as zona
-    ON tienda.ZONA_ID = zona.ZONA_ID
-ORDER BY tienda.[TIENDA_ID] ASC;
+    ON tienda.ZONA_ID = zona.ZONA_ID;
  
 

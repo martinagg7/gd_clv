@@ -18,7 +18,7 @@ SELECT
     S.Code_,
     S.EXTENSION_GARANTIA,
     S.BASE_DATE,
-    S.EN_GARANTIA,
+    S.EN_GARANTIA,  
     L.Fue_Lead,
     L.Lead_compra,
     L.Origen_Compra_ID,
