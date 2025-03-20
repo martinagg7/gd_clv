@@ -7,7 +7,7 @@ SELECT
     S.MOTIVO_VENTA_ID,
     MV.MOTIVO_VENTA,
     S.FORMA_PAGO_ID,
-    FP.FORMA_PAGO,
+    FP.FORMA_PAGO, 
     FP.FORMA_PAGO_GRUPO,
     S.SEGURO_BATERIA_LARGO_PLAZO,
     S.MANTENIMIENTO_GRATUITO,
@@ -22,7 +22,7 @@ SELECT
     L.Fue_Lead,
     L.Lead_compra,
     L.Origen_Compra_ID,
-    OV.Origen,  -- Conectamos Logística con Origen de Venta
+    OV.Origen,  
     L.t_prod_date,
     L.t_logist_days,
     L.t_stock_dates,
@@ -36,7 +36,21 @@ SELECT
     C.DIAS_EN_TALLER,
     C.DIAS_DESDE_LA_ULTIMA_ENTRADA_TALLER,
     C.QUEJA,
-    E.Car_Age
+    E.Car_Age,
+    -- Margen_Bruto 
+    COST.Margen,  
+    ROUND(S.PVP * (COST.Margen / 100) * (1 - S.IMPUESTOS / 100), 2) AS Margen_Bruto,
+    --Margen_Eur
+    COST.Margendistribuidor,
+    COST.GastosMarketing,
+    COST.Comisión_Marca,
+    COST.Costetransporte,
+    ROUND(
+        S.PVP * (COST.Margen * 0.01) * (1 - S.IMPUESTOS / 100) - S.COSTE_VENTA_NO_IMPUESTOS - 
+        (COST.Margendistribuidor * 0.01 + COST.GastosMarketing * 0.01 - COST.Comisión_Marca * S.PVP * (1 - S.IMPUESTOS / 100)) - COST.Costetransporte, 
+        2
+    ) AS Margen_Eur
+
 FROM [DATAEX].[001_sales] S
 LEFT JOIN [DATAEX].[010_forma_pago] FP 
     ON S.FORMA_PAGO_ID = FP.FORMA_PAGO_ID
@@ -51,4 +65,9 @@ LEFT JOIN [DATAEX].[008_cac] C
 LEFT JOIN [DATAEX].[018_edad] E 
     ON S.CODE = E.CODE
 LEFT JOIN [DATAEX].[009_motivo_venta] MV 
-    ON S.MOTIVO_VENTA_ID = MV.MOTIVO_VENTA_ID;
+    ON S.MOTIVO_VENTA_ID = MV.MOTIVO_VENTA_ID
+LEFT JOIN [DATAEX].[006_producto] P 
+    ON S.Id_Producto = P.Id_Producto
+LEFT JOIN [DATAEX].[007_COSTES] COST 
+    ON P.Modelo = COST.Modelo;
+
