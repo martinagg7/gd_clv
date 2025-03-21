@@ -38,7 +38,8 @@ SELECT
     R.Revisiones,
     R.Km_medio_por_revision,
     R.km_ultima_revision,
-    R.DIAS_DESDE_ULTIMA_REVISION,
+    --Como la variable dias_desde_ultima_revision estaba en formato varchat y con puntos, se ha tenido que hacer un cast a INT
+    TRY_CAST(REPLACE(R.DIAS_DESDE_ULTIMA_REVISION, '.', '') AS INT) as DIAS_DESDE_ULTIMA_REVISION,
     R.DATE_UTIMA_REV,
     --CAC
     C.DIAS_EN_TALLER,
@@ -46,10 +47,18 @@ SELECT
     C.QUEJA,
     --Edad Coche
     E.Car_Age,
+
     -- Margen_Bruto   
     ROUND(S.PVP * (COST.Margen / 100) * (1 - S.IMPUESTOS / 100), 2) AS Margen_Bruto,
+    
     --Margen_Eur
     ROUND(S.PVP * (COST.Margen)*0.01 * (1 - S.IMPUESTOS / 100) - S.COSTE_VENTA_NO_IMPUESTOS - (COST.Margendistribuidor*0.01 + COST.GastosMarketing*0.01-COST.Comisión_Marca*0.01) * S.PVP * (1 - S.IMPUESTOS / 100) - COST.Costetransporte, 2) AS Margen_eur
+
+    --Variable Churn(1 -> dias_desde_ultima_revision >401,0 caso contrario)
+    ,CASE
+        WHEN TRY_CAST(REPLACE(R.DIAS_DESDE_ULTIMA_REVISION, '.', '') AS INT) > 401 THEN 1
+        ELSE 0
+    END AS Churn
     --JOINs
 FROM [DATAEX].[001_sales] S
 LEFT JOIN [DATAEX].[010_forma_pago] FP 
