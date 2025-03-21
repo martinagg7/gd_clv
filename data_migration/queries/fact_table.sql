@@ -1,56 +1,53 @@
 SELECT 
+    --Sales
     S.CODE,
-    S.Sales_Date,
+    S.Code_,
     S.Customer_ID,
     S.Id_Producto,
-    S.PVP,
+    S.TIENDA_ID,
     S.MOTIVO_VENTA_ID,
-    MV.MOTIVO_VENTA,
     S.FORMA_PAGO_ID,
-    FP.FORMA_PAGO, 
-    FP.FORMA_PAGO_GRUPO,
+    S.Sales_Date,
+    S.PVP,
     S.SEGURO_BATERIA_LARGO_PLAZO,
     S.MANTENIMIENTO_GRATUITO,
     S.FIN_GARANTIA,
     S.COSTE_VENTA_NO_IMPUESTOS,
     S.IMPUESTOS,
-    S.TIENDA_ID,
-    S.Code_,
     S.EXTENSION_GARANTIA,
     S.BASE_DATE,
-    S.EN_GARANTIA,  
+    S.EN_GARANTIA,
+    --Forma_pago
+    FP.FORMA_PAGO, 
+    FP.FORMA_PAGO_GRUPO,
+    --Logistica
     L.Fue_Lead,
     L.Lead_compra,
-    L.Origen_Compra_ID,
-    OV.Origen,  
     L.t_prod_date,
     L.t_logist_days,
     L.t_stock_dates,
     L.Prod_date,
     L.Logistic_date,
+    L.Origen_Compra_ID,
+    --0rigen_venta
+    OV.Origen,  
+    --revisiones
     R.Revisiones,
     R.Km_medio_por_revision,
     R.km_ultima_revision,
     R.DIAS_DESDE_ULTIMA_REVISION,
     R.DATE_UTIMA_REV,
+    --CAC
     C.DIAS_EN_TALLER,
     C.DIAS_DESDE_LA_ULTIMA_ENTRADA_TALLER,
     C.QUEJA,
+    --Edad Coche
     E.Car_Age,
-    -- Margen_Bruto 
-    COST.Margen,  
+    -- Margen_Bruto   
     ROUND(S.PVP * (COST.Margen / 100) * (1 - S.IMPUESTOS / 100), 2) AS Margen_Bruto,
     --Margen_Eur
-    COST.Margendistribuidor,
-    COST.GastosMarketing,
-    COST.Comisión_Marca,
-    COST.Costetransporte,
-    ROUND(
-        S.PVP * (COST.Margen * 0.01) * (1 - S.IMPUESTOS / 100) - S.COSTE_VENTA_NO_IMPUESTOS - 
-        (COST.Margendistribuidor * 0.01 + COST.GastosMarketing * 0.01 - COST.Comisión_Marca * S.PVP * (1 - S.IMPUESTOS / 100)) - COST.Costetransporte, 
-        2
-    ) AS Margen_Eur
-
+    ROUND(S.PVP * (COST.Margen)*0.01 * (1 - S.IMPUESTOS / 100) - S.COSTE_VENTA_NO_IMPUESTOS - (COST.Margendistribuidor*0.01 + COST.GastosMarketing*0.01-COST.Comisión_Marca*0.01) * S.PVP * (1 - S.IMPUESTOS / 100) - COST.Costetransporte, 2) AS Margen_eur
+    --JOINs
 FROM [DATAEX].[001_sales] S
 LEFT JOIN [DATAEX].[010_forma_pago] FP 
     ON S.FORMA_PAGO_ID = FP.FORMA_PAGO_ID

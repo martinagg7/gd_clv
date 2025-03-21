@@ -1,0 +1,2 @@
+1.En la tabla fact, como ya tenemos sales_date de logística eliminamos también esta columna.?
+2.En matenimiento gratuirot que es 0-4

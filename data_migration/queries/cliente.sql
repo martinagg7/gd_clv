@@ -1,5 +1,6 @@
 
 SELECT 
+    --Clientes
     c.Customer_ID,
     c.Edad,
     c.RENTA_MEDIA_ESTIMADA,
@@ -9,11 +10,13 @@ SELECT
     c.CODIGO_POSTAL,
     c.Fecha_nacimiento,
     c.STATUS_SOCIAL,
+    --Código Postal
     cp.provincia,
     cp.poblacion,
     cp.codigopostalid,
     cp.lat,
     cp.lon,
+    --Mosaic
     m.U,
     m.PROV,
     m.PROV_INE,
