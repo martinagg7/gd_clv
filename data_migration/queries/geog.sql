@@ -1,10 +1,6 @@
---Select *  from[DATAEX].[011_tienda]
---select * from [DATAEX].[012_provincia]
---select * from [DATAEX].[013_zona]
 
-
-
---Tabla Geografica:  Hacemos un LEFT JOIN de la tabla tienda con las tablas PROVINCIA y ZONA.
+--Tabla Geografica:Con la información geográfica de las tiendas.
+--Se unen las tablas tienda,provincia y zona.
 
 SELECT 
     tienda.[TIENDA_ID],

@@ -1,3 +1,6 @@
+--Tabla Fact: Con toda la información de las ventas.
+--Se unen las tablas sales,forma_pago,logistica,origen_venta,revisiones,cac,edad y costes.
+
 SELECT 
     --Sales
     S.CODE,

@@ -1,25 +1,26 @@
---SELECT * FROM [DATAEX].[006_producto] 
---SELECT * FROM [DATAEX].[014_categoría_producto] 
---SELECT * FROM [DATAEX].[007_costes]
---SELECT * FROM [DATAEX].[015_fuel]
 
-
-SELECT producto.[CATEGORIA_ID]
-        ,producto.[Fuel_ID]
-        ,producto.[Id_Producto]
-        ,producto.[TRANSMISION_ID]
-        ,producto.[Kw]
-        ,producto.[Code_]
-        ,producto.[Modelo]
-        ,producto.[TIPO_CARROCERIA]
-        ,categoria.[Equipamiento]
-        ,costes.[Margen]
-        ,costes.[Costetransporte]
-        ,costes.[Margendistribuidor]
-        ,costes.[GastosMarketing]
-        ,costes.[Mantenimiento_medio]
-        ,costes.[Comisión_Marca]
-        ,fuel.[FUEL]
+SELECT 
+        --Producto
+        producto.Id_Producto
+        ,producto.Code_
+        ,producto.CATEGORIA_ID
+        ,producto.Fuel_ID
+        ,producto.TRANSMISION_ID
+        ,producto.Kw
+        ,producto.Modelo
+        ,producto.TIPO_CARROCERIA
+        --Categoría
+        ,categoria.Equipamiento
+        ,categoria.Grade_ID --Especifica el tipo de equipamiento(0-Low/1,2-Mid/3-Mid-High/4-High)
+        --Costes
+        ,costes.Margen
+        ,costes.Costetransporte
+        ,costes.Margendistribuidor
+        ,costes.GastosMarketing
+        ,costes.Mantenimiento_medio
+        ,costes.Comisión_Marca
+        --Fuel
+        ,fuel.FUEL
   FROM [DATAEX].[006_producto] AS producto
     LEFT JOIN [DATAEX].[014_categoría_producto] AS categoria
         ON producto.CATEGORIA_ID = categoria.CATEGORIA_ID

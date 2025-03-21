@@ -1,3 +1,5 @@
+--Tabla Cliente: Con toda la información de los clientes,código postal,zonas renta....
+--Se unen las tablas clientes,cp y mosaic.
 
 SELECT 
     --Clientes
