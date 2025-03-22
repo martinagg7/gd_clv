@@ -4,4 +4,5 @@
 4.Preguntarle a jacinto que imagintae que un lciente tiene má de un coche.Los dias desde la última revision tendrian que ser lo minimso o ns 
 5.En sales date como están en varchat es necesario convertitlas o las poedmos convertit directamente en tabla clientes
 6.Seria intersante sacar si compraron modelos diferenres?
-7.Como susitimos las quejas por 0 se podría esta interprentando el resutlado de forma errore
+7.Como susitimos las quejas por 0 se podría esta interprentando el resutlado de forma errorena,yo lo que hcoe fue contar el numero total de quejas y dejar los null como si fuesen 0
+6.Las variables fecha, mejor als converitvmos en las consutlas o adonde

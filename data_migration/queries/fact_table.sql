@@ -10,15 +10,15 @@ SELECT
     S.TIENDA_ID,
     S.MOTIVO_VENTA_ID,
     S.FORMA_PAGO_ID,
-    S.Sales_Date,
+    CONVERT(DATE, S.Sales_Date, 103) AS Sales_Date,
     S.PVP,
     S.SEGURO_BATERIA_LARGO_PLAZO,
     S.MANTENIMIENTO_GRATUITO,
-    S.FIN_GARANTIA,
+    CONVERT(DATE, FIN_GARANTIA, 103) AS FIN_GARANTIA,
     S.COSTE_VENTA_NO_IMPUESTOS,
     S.IMPUESTOS,
     S.EXTENSION_GARANTIA,
-    S.BASE_DATE,
+    CONVERT(DATE, S.BASE_DATE, 103) AS BASE_DATE,
     S.EN_GARANTIA,
 
     --Forma_pago
@@ -31,8 +31,8 @@ SELECT
     L.t_prod_date,
     L.t_logist_days,
     L.t_stock_dates,
-    L.Prod_date,
-    L.Logistic_date,
+    CONVERT(DATE, L.Prod_date, 103) AS Prod_date,
+    CONVERT(DATE, L.Logistic_date, 103) AS Logistic_date,
     L.Origen_Compra_ID,
 
     --0rigen_venta
@@ -44,7 +44,7 @@ SELECT
     R.km_ultima_revision,
     --Como la variable dias_desde_ultima_revision estaba en formato varchat y con puntos, se ha tenido que hacer un cast a INT
     TRY_CAST(REPLACE(R.DIAS_DESDE_ULTIMA_REVISION, '.', '') AS INT) as DIAS_DESDE_ULTIMA_REVISION,
-    R.DATE_UTIMA_REV,
+    CONVERT(DATE, R.DATE_UTIMA_REV, 103) AS Fecha_Ultima_Revision,
 
     --CAC
     C.DIAS_EN_TALLER,
@@ -60,15 +60,18 @@ SELECT
     --Margen_Eur
     ROUND(S.PVP * (COST.Margen)*0.01 * (1 - S.IMPUESTOS / 100) - S.COSTE_VENTA_NO_IMPUESTOS - (COST.Margendistribuidor*0.01 + COST.GastosMarketing*0.01-COST.Comisión_Marca*0.01) * S.PVP * (1 - S.IMPUESTOS / 100) - COST.Costetransporte, 2) AS Margen_eur
 
+        --Coste Venta
+    ,ROUND(S.COSTE_VENTA_NO_IMPUESTOS +((COST.Margendistribuidor * 0.01 + COST.GastosMarketing * 0.01 - COST.Comisión_Marca * 0.01) * S.PVP * (1 - S.IMPUESTOS / 100)) +COST.Costetransporte,2
+    ) AS Coste_Total
+
+
     --Variable Churn(1 -> dias_desde_ultima_revision >401,0 caso contrario)
     ,CASE
         WHEN TRY_CAST(REPLACE(R.DIAS_DESDE_ULTIMA_REVISION, '.', '') AS INT) > 401 THEN 1
         ELSE 0
     END AS Churn
 
-    --Coste Venta
-    ,ROUND(S.COSTE_VENTA_NO_IMPUESTOS +((COST.Margendistribuidor * 0.01 + COST.GastosMarketing * 0.01 - COST.Comisión_Marca * 0.01) * S.PVP * (1 - S.IMPUESTOS / 100)) +COST.Costetransporte,2
-) AS Coste_Total
+
 
    
     --JOINs
@@ -91,5 +94,6 @@ LEFT JOIN [DATAEX].[009_motivo_venta] MV
 LEFT JOIN [DATAEX].[006_producto] P 
     ON S.Id_Producto = P.Id_Producto
 LEFT JOIN [DATAEX].[007_COSTES] COST 
-    ON P.Modelo = COST.Modelo;
+    ON P.Modelo = COST.Modelo
+Order by s.Customer_ID;
 
