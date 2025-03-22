@@ -20,9 +20,11 @@ SELECT
     S.EXTENSION_GARANTIA,
     S.BASE_DATE,
     S.EN_GARANTIA,
+
     --Forma_pago
     FP.FORMA_PAGO, 
     FP.FORMA_PAGO_GRUPO,
+
     --Logistica
     L.Fue_Lead,
     L.Lead_compra,
@@ -32,8 +34,10 @@ SELECT
     L.Prod_date,
     L.Logistic_date,
     L.Origen_Compra_ID,
+
     --0rigen_venta
-    OV.Origen,  
+    OV.Origen,
+
     --revisiones
     R.Revisiones,
     R.Km_medio_por_revision,
@@ -41,10 +45,12 @@ SELECT
     --Como la variable dias_desde_ultima_revision estaba en formato varchat y con puntos, se ha tenido que hacer un cast a INT
     TRY_CAST(REPLACE(R.DIAS_DESDE_ULTIMA_REVISION, '.', '') AS INT) as DIAS_DESDE_ULTIMA_REVISION,
     R.DATE_UTIMA_REV,
+
     --CAC
     C.DIAS_EN_TALLER,
     C.DIAS_DESDE_LA_ULTIMA_ENTRADA_TALLER,
     C.QUEJA,
+
     --Edad Coche
     E.Car_Age,
 
@@ -59,7 +65,14 @@ SELECT
         WHEN TRY_CAST(REPLACE(R.DIAS_DESDE_ULTIMA_REVISION, '.', '') AS INT) > 401 THEN 1
         ELSE 0
     END AS Churn
+
+    --Coste Venta
+    ,ROUND(S.COSTE_VENTA_NO_IMPUESTOS +((COST.Margendistribuidor * 0.01 + COST.GastosMarketing * 0.01 - COST.Comisión_Marca * 0.01) * S.PVP * (1 - S.IMPUESTOS / 100)) +COST.Costetransporte,2
+) AS Coste_Total
+
+   
     --JOINs
+
 FROM [DATAEX].[001_sales] S
 LEFT JOIN [DATAEX].[010_forma_pago] FP 
     ON S.FORMA_PAGO_ID = FP.FORMA_PAGO_ID

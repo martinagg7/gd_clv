@@ -12,16 +12,18 @@ SELECT
     c.CODIGO_POSTAL,
     c.Fecha_nacimiento,
     c.STATUS_SOCIAL,
+
     --Código Postal
     cp.provincia,
     cp.poblacion,
     cp.codigopostalid,
     cp.lat,
     cp.lon,
+
     --Mosaic
     m.U,
     m.PROV,
-    m.PROV_INE,
+    m.PROV_INE,--PENSARME SI ELIMINAR
     m.Max_Mosaic,
     m.Max_Mosaic1,
     m.A,
@@ -42,6 +44,7 @@ SELECT
     m.Count,
     m.Mosaic_number,
     m.[Check] 
+    
 FROM [DATAEX].[003_clientes] c
 LEFT JOIN [DATAEX].[005_cp] cp 
     ON c.CODIGO_POSTAL = cp.CP  -- 1º LEFT JOIN de clientes con al tabla CP

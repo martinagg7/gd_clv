@@ -1,3 +1,7 @@
 1.En la tabla fact, como ya tenemos sales_date de logística eliminamos también esta columna.?
 2.En matenimiento gratuirot que es 0-4
 3.En la tabla clientes que hacemos con los que tiene CP 0
+4.Preguntarle a jacinto que imagintae que un lciente tiene má de un coche.Los dias desde la última revision tendrian que ser lo minimso o ns 
+5.En sales date como están en varchat es necesario convertitlas o las poedmos convertit directamente en tabla clientes
+6.Seria intersante sacar si compraron modelos diferenres?
+7.Como susitimos las quejas por 0 se podría esta interprentando el resutlado de forma errore

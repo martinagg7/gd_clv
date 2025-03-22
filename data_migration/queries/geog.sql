@@ -3,11 +3,16 @@
 --Se unen las tablas tienda,provincia y zona.
 
 SELECT 
+    --Tienda
     tienda.[TIENDA_ID],
     tienda.[PROVINCIA_ID],
     tienda.[ZONA_ID],
     tienda.[TIENDA_DESC],
+
+    --Provincia
     provincia.[PROV_DESC],
+
+    --Zona
     zona.[ZONA]
 
 FROM [DATAEX].[011_tienda] as tienda

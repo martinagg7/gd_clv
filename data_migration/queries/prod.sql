@@ -9,9 +9,11 @@ SELECT
         ,producto.Kw
         ,producto.Modelo
         ,producto.TIPO_CARROCERIA
+
         --Categoría
         ,categoria.Equipamiento
         ,categoria.Grade_ID --Especifica el tipo de equipamiento(0-Low/1,2-Mid/3-Mid-High/4-High)
+
         --Costes
         ,costes.Margen
         ,costes.Costetransporte
@@ -19,6 +21,7 @@ SELECT
         ,costes.GastosMarketing
         ,costes.Mantenimiento_medio
         ,costes.Comisión_Marca
+        
         --Fuel
         ,fuel.FUEL
   FROM [DATAEX].[006_producto] AS producto
