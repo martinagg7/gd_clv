@@ -2,7 +2,8 @@
 
 ## 1. Objetivo del análisis
 
-El objetivo de este análisis es aplicar técnicas de reducción de dimensionalidad mediante Análisis de Componentes Principales (PCA) para simplificar la representación de clientes, conservando la máxima información posible. Posteriormente, se busca segmentar a los clientes en grupos homogéneos en función de su comportamiento, características y rentabilidad, facilitando la toma de decisiones estratégicas (marketing, fidelización, retención, etc.).
+El objetivo de este análisis es aplicar técnicas de reducción de dimensionalidad mediante PCA para simplificar la representación de clientes.
+Posteriormente, se busca segmentar a los clientes en grupos en función de su comportamiento, características y rentabilidad, facilitando la toma de decisiones estratégicas (marketing, fidelización, retención, etc.).
 
 ---
 
@@ -10,25 +11,24 @@ El objetivo de este análisis es aplicar técnicas de reducción de dimensionali
 
 ### 2.1 Fuente y origen de los datos
 
-Los datos provienen de un entorno analítico diseñado a partir de un Data Warehouse (DWH) que centraliza información de diferentes áreas del negocio (ventas, mantenimiento, comportamiento, etc.). Las principales tablas utilizadas son:
+Los datos provinienen de nuestro modelo dimensional:
 
 - `dim_cliente`: contiene atributos personales y socioeconómicos de los clientes.
 - `dim_fact`: contiene datos de compras, revisiones, costes, márgenes, etc.
 - `dim_tiempo`: permite identificar fechas especiales (festivos, fines de semana, etc.).
+- `dim_producto`: nos da información sobre el el vehícullo de cad cliente.
 
-Estas tablas se integraron para construir una visión 360º del cliente.
+
 
 ### 2.2 Construcción de la tabla de análisis
 
 Se generó una consulta SQL (`vision_cliente.sql`) que consolida por cada cliente:
 
-- Atributos sociodemográficos (edad, renta estimada, género, ubicación...).
+- Datos reprentativos de los clientes(edad, renta estimada, género, ubicación...).
 - Métricas de comportamiento de compra (número de compras, gasto total, días desde la última compra...).
 - Indicadores de uso y mantenimiento del vehículo (número de revisiones, días en taller...).
 - Medidas de rentabilidad (costes, márgenes...).
 - Señales de fidelidad, quejas y retención.
-
-El resultado fue una tabla con una fila por cliente, y múltiples variables numéricas y categóricas que describen su relación con la empresa.
 
 ---
 
