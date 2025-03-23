@@ -70,21 +70,26 @@ SELECT
   END AS Compra_Finde_O_Festivo,
 
 
-  -- USO Y MANTENIMIENTO
-
+ --3.USO Y MANTENIMIENTO
+  -- edad_media_coche: promedio de edad de todos los coches del cliente
+	 AVG(f.Car_Age) AS Edad_Media_Coche,
+	
   -- total_revisiones:total de revisiones o mantenimientos realizados
   SUM(f.Revisiones) AS Total_Revisiones,
 
   -- km_medio_por_revision:promedio de km recorridos por cada revisión
   AVG(f.Km_medio_por_revision) AS Km_Medio_por_Revision,
+
   -- tuvo_mantenimiento_gratuito indica si se recibió mantenimiento gratuito (1=si, 0=no)
   CASE 
     WHEN MAX(f.MANTENIMIENTO_GRATUITO) = 4 THEN 1 
     ELSE 0 
   END AS Tuvo_Mantenimiento_Gratuito,
 
+    -- dias_medio_en_taller: días promedio los coches de un cliente estuvieron en el taller
+  AVG(f.DIAS_EN_TALLER) AS Dias_Medio_En_Taller,
 
-  -- SATISFACCION Y SERVICIO
+ --4. SATISFACCION Y SERVICIO
   -- total_quejas:número total de quejas registradas(Las sumamos porque como hay muchos valores null convertidos a 0,podríamos estar sesgando el resultado)
   SUM(CASE WHEN f.QUEJA = 'SI' THEN 1 ELSE 0 END) AS Total_Quejas,
 
@@ -111,14 +116,18 @@ SELECT
   AVG(f.Margen_eur) AS Margen_eur_Medio,
 
   -- rentabilidad_relativa: euros ganados netos por cada euro invertido en costes
-  AVG(f.Margen_eur) / NULLIF(AVG(f.Coste_Total), 0) AS Rentabilidad_Relativa  
+  AVG(f.Margen_eur) / NULLIF(AVG(f.Coste_Total), 0) AS Rentabilidad_Relativa , 
+
+ --4.CHURN Y RETENCION
+	  AVG(CAST(f.Churn AS DECIMAL(10,2))) AS churn_medio,
+	 AVG(f.DIAS_DESDE_ULTIMA_REVISION) AS Dias_Medios_Desde_Ultima_Revision
 
 
-FROM [dwh_case1].[dbo].[cliente] c
-LEFT JOIN [dbo].[fact_table] f
+FROM [dwh_case1].[dbo].[dim_cliente] c
+LEFT JOIN [dbo].[dim_fact] f
   ON c.Customer_ID = f.Customer_ID
 --LEFT JOIN fact_table con Tiempo (Para comprobar si las fehchas de venta son en festivos,findes,días laborales..)
-LEFT JOIN [dbo].[tiempo] t
+LEFT JOIN [dbo].[dim_tiempo] t
   ON f.Sales_Date = t.Date
 
 GROUP BY 
@@ -133,4 +142,4 @@ GROUP BY
   c.poblacion,
   c.lat,
   c.lon
-ORDER BY c.Customer_ID;
+;

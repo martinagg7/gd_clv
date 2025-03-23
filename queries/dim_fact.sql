@@ -1,7 +1,7 @@
 --Tabla Fact: Con toda la información de las ventas.
 --Se unen las tablas sales,forma_pago,logistica,origen_venta,revisiones,cac,edad y costes.
 
-SELECT 
+SELECT  
 
     --Sales
     S.CODE,--PK:tabla sales
@@ -45,7 +45,14 @@ SELECT
     R.km_ultima_revision,
     --Como la variable dias_desde_ultima_revision estaba en formato varchat y con puntos, se ha tenido que hacer un cast a INT
     TRY_CAST(REPLACE(R.DIAS_DESDE_ULTIMA_REVISION, '.', '') AS INT) as DIAS_DESDE_ULTIMA_REVISION,
-    CONVERT(DATE, R.DATE_UTIMA_REV, 103) AS Fecha_Ultima_Revision,
+    --Fecha Ultima Revision
+    CASE 
+        WHEN R.DATE_UTIMA_REV IS NULL 
+            OR LTRIM(RTRIM(R.DATE_UTIMA_REV)) = ''--Si la fecha es nula o vacía,ponemos Null en vez de 1900-01-01
+        THEN NULL
+        ELSE CONVERT(DATE, R.DATE_UTIMA_REV, 103)
+    END AS Fecha_Ultima_Revision,
+
 
     --CAC
     C.DIAS_EN_TALLER,
@@ -97,5 +104,7 @@ LEFT JOIN [DATAEX].[006_producto] P
     ON S.Id_Producto = P.Id_Producto
 LEFT JOIN [DATAEX].[007_COSTES] COST 
     ON P.Modelo = COST.Modelo
-Order by s.Customer_ID;
+
+oRDER BY  Customer_ID
+;
 

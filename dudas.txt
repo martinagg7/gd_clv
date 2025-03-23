@@ -8,6 +8,7 @@
 6.Las variables fecha, mejor als converitvmos en las consutlas o adonde
 8.De la tabla cliente añado al edad media de coche  paea la tabal visio cieet
 9.Cómo hacemos para demsitrate que o hay numlos
-
-
+10.Explicarla  jacinto lo qee me pasa con las fechas
+11.La columa dias en el talle tiene mcuhos numlos
+12.Lo de churn que hacemos si tiene mas de un coche.
 --ME QUEDA PK Y FK TBALAS
