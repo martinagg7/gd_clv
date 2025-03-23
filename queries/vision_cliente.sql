@@ -1,4 +1,5 @@
--- DATOS BASICOS DEL CLIENTE
+-- vision_cliente.sql: Consulta que devuelve un conjunto de métricas descriptivas y agregadas por cliente,
+
 SELECT 
 --MEDIDAS DESCRIPTIVAS POR CLIENTE
   c.Customer_ID,
@@ -124,10 +125,10 @@ SELECT
 
 
 FROM [dwh_case1].[dbo].[dim_cliente] c
-LEFT JOIN [dbo].[dim_fact] f
+LEFT JOIN [dwh_case1].[dbo].[dim_fact] f
   ON c.Customer_ID = f.Customer_ID
 --LEFT JOIN fact_table con Tiempo (Para comprobar si las fehchas de venta son en festivos,findes,días laborales..)
-LEFT JOIN [dbo].[dim_tiempo] t
+LEFT JOIN [dwh_case1].[dbo].[dim_tiempo] t
   ON f.Sales_Date = t.Date
 
 GROUP BY 
