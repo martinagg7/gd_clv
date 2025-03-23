@@ -7,6 +7,7 @@
 7.Como susitimos las quejas por 0 se podría esta interprentando el resutlado de forma errorena,yo lo que hcoe fue contar el numero total de quejas y dejar los null como si fuesen 0
 6.Las variables fecha, mejor als converitvmos en las consutlas o adonde
 8.De la tabla cliente añado al edad media de coche  paea la tabal visio cieet
+9.Cómo hacemos para demsitrate que o hay numlos
 
 
 --ME QUEDA PK Y FK TBALAS
