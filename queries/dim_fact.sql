@@ -2,14 +2,15 @@
 --Se unen las tablas sales,forma_pago,logistica,origen_venta,revisiones,cac,edad y costes.
 
 SELECT 
+
     --Sales
-    S.CODE,
+    S.CODE,--PK:tabla sales
     S.Code_,
-    S.Customer_ID,
-    S.Id_Producto,
-    S.TIENDA_ID,
-    S.MOTIVO_VENTA_ID,
-    S.FORMA_PAGO_ID,
+    S.Customer_ID,--FK
+    S.Id_Producto,--FK
+    S.TIENDA_ID,--FK
+    S.MOTIVO_VENTA_ID,--FK
+    S.FORMA_PAGO_ID,--FK
     CONVERT(DATE, S.Sales_Date, 103) AS Sales_Date,
     S.PVP,
     S.SEGURO_BATERIA_LARGO_PLAZO,
@@ -33,12 +34,12 @@ SELECT
     L.t_stock_dates,
     CONVERT(DATE, L.Prod_date, 103) AS Prod_date,
     CONVERT(DATE, L.Logistic_date, 103) AS Logistic_date,
-    L.Origen_Compra_ID,
+    L.Origen_Compra_ID,--FK:tabla origen_venta
 
     --0rigen_venta
     OV.Origen,
 
-    --revisiones
+    --Revisiones
     R.Revisiones,
     R.Km_medio_por_revision,
     R.km_ultima_revision,
@@ -54,35 +55,34 @@ SELECT
     --Edad Coche
     E.Car_Age,
 
+
+--MÉTRICAS:
+
     -- Margen_Bruto   
     ROUND(S.PVP * (COST.Margen / 100) * (1 - S.IMPUESTOS / 100), 2) AS Margen_Bruto,
     
     --Margen_Eur
     ROUND(S.PVP * (COST.Margen)*0.01 * (1 - S.IMPUESTOS / 100) - S.COSTE_VENTA_NO_IMPUESTOS - (COST.Margendistribuidor*0.01 + COST.GastosMarketing*0.01-COST.Comisión_Marca*0.01) * S.PVP * (1 - S.IMPUESTOS / 100) - COST.Costetransporte, 2) AS Margen_eur
 
-        --Coste Venta
+    --Coste Venta
     ,ROUND(S.COSTE_VENTA_NO_IMPUESTOS +((COST.Margendistribuidor * 0.01 + COST.GastosMarketing * 0.01 - COST.Comisión_Marca * 0.01) * S.PVP * (1 - S.IMPUESTOS / 100)) +COST.Costetransporte,2
     ) AS Coste_Total
 
 
-    --Variable Churn(1 -> dias_desde_ultima_revision >401,0 caso contrario)
+    --Variable Churn(1:dias_desde_ultima_revision >401, 0 :caso contrario)
     ,CASE
         WHEN TRY_CAST(REPLACE(R.DIAS_DESDE_ULTIMA_REVISION, '.', '') AS INT) > 401 THEN 1
         ELSE 0
     END AS Churn
-
-
-
    
-    --JOINs
-
+--Joins para la tabla fact(siempre left join sales con las demás tablas para no perder información)
 FROM [DATAEX].[001_sales] S
 LEFT JOIN [DATAEX].[010_forma_pago] FP 
     ON S.FORMA_PAGO_ID = FP.FORMA_PAGO_ID
 LEFT JOIN [DATAEX].[017_logist] L 
     ON S.CODE = L.CODE
 LEFT JOIN [DATAEX].[016_origen_venta] OV 
-    ON L.Origen_Compra_ID = OV.Origen_Compra_ID
+    ON L.Origen_Compra_ID = OV.Origen_Compra_ID --Join entre la tabla logistica y origen_venta
 LEFT JOIN [DATAEX].[004_rev] R 
     ON S.CODE = R.CODE
 LEFT JOIN [DATAEX].[008_cac] C 
@@ -92,6 +92,8 @@ LEFT JOIN [DATAEX].[018_edad] E
 LEFT JOIN [DATAEX].[009_motivo_venta] MV 
     ON S.MOTIVO_VENTA_ID = MV.MOTIVO_VENTA_ID
 LEFT JOIN [DATAEX].[006_producto] P 
+
+--Joins para las métricas
     ON S.Id_Producto = P.Id_Producto
 LEFT JOIN [DATAEX].[007_COSTES] COST 
     ON P.Modelo = COST.Modelo

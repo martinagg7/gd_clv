@@ -3,13 +3,13 @@
 
 SELECT 
     --Clientes
-    c.Customer_ID,
+    c.Customer_ID,--PK:tabla clientes
     c.Edad,
     c.RENTA_MEDIA_ESTIMADA,
     c.ENCUESTA_ZONA_CLIENTE_VENTA,
     c.ENCUESTA_CLIENTE_ZONA_TALLER,
     c.GENERO,
-    c.CODIGO_POSTAL,
+    c.CODIGO_POSTAL,--FK
     c.Fecha_nacimiento,
     c.STATUS_SOCIAL,
 
@@ -45,6 +45,7 @@ SELECT
     m.Mosaic_number,
     m.[Check] 
     
+--Joins(Left join desde la tabla clientes a la tabla cp y de la tabla cp a la tabla mosaic)
 FROM [DATAEX].[003_clientes] c
 LEFT JOIN [DATAEX].[005_cp] cp 
     ON c.CODIGO_POSTAL = cp.CP  -- 1º LEFT JOIN de clientes con al tabla CP

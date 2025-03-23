@@ -1,13 +1,16 @@
+--Tabla Producto: Con toda la información de los productos.
+--Se unen las tablas producto,categoría,costes y fuel.
+
 
 SELECT 
         --Producto
-        producto.Id_Producto
+        producto.Id_Producto--PK
         ,producto.Code_
-        ,producto.CATEGORIA_ID
-        ,producto.Fuel_ID
+        ,producto.CATEGORIA_ID--FK
+        ,producto.Fuel_ID--FK
         ,producto.TRANSMISION_ID
         ,producto.Kw
-        ,producto.Modelo
+        ,producto.Modelo--FK
         ,producto.TIPO_CARROCERIA
 
         --Categoría
@@ -24,6 +27,8 @@ SELECT
         
         --Fuel
         ,fuel.FUEL
+
+--Joins(Left join de la tabla producto con las las tablas categoría, costes y fuel)
   FROM [DATAEX].[006_producto] AS producto
     LEFT JOIN [DATAEX].[014_categoría_producto] AS categoria
         ON producto.CATEGORIA_ID = categoria.CATEGORIA_ID

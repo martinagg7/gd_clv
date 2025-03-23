@@ -1,1 +1,0 @@
-SELECT * FROM [DATAEX].[002_date]

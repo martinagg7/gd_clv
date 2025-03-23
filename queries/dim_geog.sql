@@ -4,10 +4,10 @@
 
 SELECT 
     --Tienda
-    tienda.[TIENDA_ID],
-    tienda.[PROVINCIA_ID],
-    tienda.[ZONA_ID],
-    tienda.[TIENDA_DESC],
+    tienda.TIENDA_ID,--PK
+    tienda.PROVINCIA_ID,--FK
+    tienda.ZONA_ID,--FK
+    tienda.TIENDA_DESC,
 
     --Provincia
     provincia.[PROV_DESC],
@@ -15,6 +15,7 @@ SELECT
     --Zona
     zona.[ZONA]
 
+--Joins(Left join de la tabla Tienda con las las tablas Provincia y Zona)
 FROM [DATAEX].[011_tienda] as tienda
 LEFT JOIN [DATAEX].[012_provincia] as provincia 
     ON tienda.PROVINCIA_ID = provincia.PROVINCIA_ID
