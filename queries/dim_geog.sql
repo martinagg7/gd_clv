@@ -10,10 +10,10 @@ SELECT
     tienda.TIENDA_DESC,
 
     --Provincia
-    provincia.[PROV_DESC],
+    provincia.PROV_DESC,
 
     --Zona
-    zona.[ZONA]
+    zona.ZONA
 
 --Joins(Left join de la tabla Tienda con las las tablas Provincia y Zona)
 FROM [DATAEX].[011_tienda] as tienda
