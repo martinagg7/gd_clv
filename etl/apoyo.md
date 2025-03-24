@@ -1,5 +1,9 @@
 # 01_Modelo_Dimensional
 
+## Índice
+
+- [Tratamiento de los nulos](#tratamiento-de-los-nulos)
+
 ## Tratamiento de los nulos
 
 Para asegurar la consistencia del modelo y evitar errores durante el análisis, se han aplicado las siguientes decisiones de tratamiento de valores nulos, diferenciando por tabla y columna:
