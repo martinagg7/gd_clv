@@ -51,3 +51,4 @@ LEFT JOIN [DATAEX].[005_cp] cp
     ON c.CODIGO_POSTAL = cp.CP  -- 1º LEFT JOIN de clientes con al tabla CP
 LEFT JOIN [DATAEX].[019_Mosaic] m
     ON cp.CP = CONCAT('CP', CAST(m.CP AS VARCHAR(10))); --2º LEFT JOIN de la tabla CP con la tabla Mosaic
+    

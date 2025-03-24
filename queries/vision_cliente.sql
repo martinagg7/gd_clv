@@ -1,4 +1,4 @@
--- vision_cliente.sql: Consulta que devuelve un conjunto de métricas descriptivas y agregadas por cliente,
+¡-- vision_cliente.sql: Consulta que devuelve un conjunto de métricas descriptivas y agregadas por cliente,
 
 SELECT 
 --MEDIDAS DESCRIPTIVAS POR CLIENTE
@@ -119,8 +119,10 @@ SELECT
   -- rentabilidad_relativa: euros ganados netos por cada euro invertido en costes
   AVG(f.Margen_eur) / NULLIF(AVG(f.Coste_Total), 0) AS Rentabilidad_Relativa , 
 
- --4.CHURN Y RETENCION
-	  AVG(CAST(f.Churn AS DECIMAL(10,2))) AS churn_medio,
+  -- churn:se toma el mínimo valor de esta columna si tiene más de un coche
+	  MIN(f.Churn) AS Churn_Cliente, 
+
+ -- Dias_Medios_Desde_Ultima_Revision:media dias que han pasado desde la ultima revision del cliente   
 	 AVG(f.DIAS_DESDE_ULTIMA_REVISION) AS Dias_Medios_Desde_Ultima_Revision
 
 
