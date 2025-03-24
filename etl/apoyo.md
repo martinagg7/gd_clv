@@ -40,33 +40,36 @@ Para asegurar la consistencia del modelo y evitar errores durante el análisis, 
 
 **Tabla `cliente`**
 
-- *Mosaic_U y Max_Mosaic* 
+- `Mosaic_U y Max_Mosaic`
   Se sustituyen los valores nulos por `0`. Muchos clientes ya tienen estas columnas con valor 0, lo que sugiere que la empresa utiliza ese valor como marcador de “sin información”. Se mantiene esa lógica.
 
-- *Renta_Media (de Mosaic)*
+- `Renta_Media (de Mosaic)`
   También se sustituye por `0`. Al igual que en los campos anteriores, se ha observado que la empresa ya representa con 0 los casos sin datos de renta.
 
-- *Lat y Lon (latitud y longitud)*  
+- `Lat y Lon (latitud y longitud)`
   Se sustituyen los valores nulos por `'NA'`. Esto evita que Power BI coloque puntos en coordenadas incorrectas como (0,0), lo que podría distorsionar los mapas.
 
-- *provincia y género*  
+- `provincia y género`
   Se sustituyen los valores vacíos o nulos por `'NA'`. Esto permite tratarlos como categorías distintas y fácilmente filtrables en Power BI, en lugar de aparecer como valores en blanco o errores.
 
 
 
 **Tabla `fact`**
 
-- *Fecha_Ultima_Revision*  
+- `Fecha_Ultima_Revision`
   Se convierte a formato fecha con `pd.to_datetime`, dejando los valores nulos como `NaT`. Esto facilita su tratamiento posterior en Power BI como fechas desconocidas.
 
-- *DIAS_EN_TALLER** y **DIAS_DESDE_LA_ULTIMA_ENTRADA_TALLER*
+- `DIAS_EN_TALLER` y `DIAS_DESDE_LA_ULTIMA_ENTRADA_TALLER`
   Se sustituyen por `0`. Si el cliente no ha pasado por el taller, se considera como cero días, lo que es coherente con los datos asociados.
 
-- *DIAS_DESDE_ULTIMA_REVISION*
+- `DIAS_DESDE_ULTIMA_REVISION`
   Se sustituye por `0` cuando coincide con `Revisiones = 0` y `Km_medio_por_revision = 0`, lo que indica que no ha realizado ninguna revisión.
 
-- *QUEJA* 
+- `QUEJA`
   Se sustituyen los valores nulos por `'NA'`. Esto permite distinguir entre “no se ha quejado” (`'NO'`) y “no se tiene información” (`'NA'`), sin falsear los análisis de quejas.
 
-- *Car_Age* 
+- `Car_Age`
   Se sustituyen los valores nulos por `0`. Dado que son pocos (459 de 58.049), se considera que no afectarán significativamente a los análisis agregados.
+
+
+# 02_Vision_Cliente

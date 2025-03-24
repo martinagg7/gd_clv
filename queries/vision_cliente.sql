@@ -1,4 +1,4 @@
-¡-- vision_cliente.sql: Consulta que devuelve un conjunto de métricas descriptivas y agregadas por cliente,
+-- vision_cliente.sql: Consulta que devuelve un conjunto de métricas descriptivas y agregadas por cliente,
 
 SELECT 
 --MEDIDAS DESCRIPTIVAS POR CLIENTE
@@ -144,5 +144,4 @@ GROUP BY
   c.provincia,
   c.poblacion,
   c.lat,
-  c.lon
-;
+  c.lon;
