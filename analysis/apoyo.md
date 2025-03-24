@@ -76,6 +76,50 @@ Para aplicar correctamente PCA, se seleccionaron únicamente variables numérica
 
 ---
 
-## 4. Aplicación del PCA
+## Análisis de Clusters: Tipología de Clientes
 
-En esta sección se describe el preprocesamiento, escalado de variables y cálculo de componentes principales. *(A desarrollar una vez se realice el código)*.
+### Cluster 0 — Clientes básicos o discretos
+
+**¿Quiénes son?**  
+Clientes de mayor edad, con menor renta media, que han comprado pocos vehículos y apenas realizan revisiones. Tienen coches relativamente nuevos, pero no muestran una alta interacción con la marca.
+
+**Características destacadas:**
+- Compran menos y gastan menos que la media.
+- Realizan pocas revisiones y tienen menor uso del coche.
+- Tienen coches más nuevos que la media.
+- Su rentabilidad es media, no generan pérdidas ni grandes beneficios.
+
+**Tipo de cliente:**  
+Clientes discretos, poco conectados con la marca, con bajo potencial de rentabilidad. No están fidelizados.
+
+---
+
+### Cluster 1 — Clientes antiguos y costosos
+
+**¿Quiénes son?**  
+Clientes más jóvenes con mayor renta media, pero con coches muy antiguos y alto número de revisiones. Hace mucho que no compran un coche. Generan un coste elevado y dejan poco margen de beneficio.
+
+**Características destacadas:**
+- Compran poco y han dejado de comprar recientemente.
+- Sus vehículos son antiguos y requieren mucho mantenimiento.
+- Hacen muchas revisiones, con alto coste medio.
+- Su rentabilidad es baja.
+
+**Tipo de cliente:**  
+Clientes antiguos y poco rentables. Representan una carga para el negocio. Se recomienda valorar si reactivarlos o dejar de invertir en ellos.
+
+---
+
+### Cluster 2 — Clientes premium y fieles
+
+**¿Quiénes son?**  
+Clientes con renta media-alta, muy activos, que han sido lead muchas veces, compran con frecuencia y de forma reciente, y realizan muchas revisiones. Son ligeramente más costosos, pero también más rentables.
+
+**Características destacadas:**
+- Compran y gastan mucho más que la media.
+- Interactúan frecuentemente con la marca (leads, revisiones).
+- Compran recientemente y revisan sus vehículos con regularidad.
+- Son los más rentables del conjunto.
+
+**Tipo de cliente:**  
+Clientes premium, fidelizados, y con alto valor para el negocio. Representan el grupo más interesante para estrategias de fidelización y programas VIP.
