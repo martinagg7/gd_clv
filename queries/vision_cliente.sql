@@ -58,11 +58,13 @@ SELECT
     ) AS Dias_Entre_Primera_Ultima_Compra,
 
     -- dias_desde_ultima_compra:días desde la última compra
+-- días desde la última compra (referencia fija: último día que se actualizó la base de datos BASE_DATE:2023-12-31) 
     DATEDIFF(
         DAY,
         MAX(f.Sales_Date),
-        GETDATE()
+        '2023-12-31'
     ) AS Dias_Desde_Ultima_Compra,
+
 
   -- compra_finde_o_festivo:indica si se realizó alguna compra en fines de semana o festivos (1=si, 0=no)
   CASE 

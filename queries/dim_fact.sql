@@ -44,7 +44,8 @@ SELECT
     R.Km_medio_por_revision,
     R.km_ultima_revision,
     --Como la variable dias_desde_ultima_revision estaba en formato varchat y con puntos, se ha tenido que hacer un cast a INT
-    TRY_CAST(REPLACE(R.DIAS_DESDE_ULTIMA_REVISION, '.', '') AS INT) as DIAS_DESDE_ULTIMA_REVISION,
+    TRY_CAST(REPLACE(R.DIAS_DESDE_ULTIMA_REVISION, '.', '') AS INT) AS Dias_Desde_Ultima_Revision,
+
     --Fecha Ultima Revision
     CASE 
         WHEN R.DATE_UTIMA_REV IS NULL 
@@ -73,15 +74,21 @@ SELECT
 
     --Coste Venta
     ,ROUND(S.COSTE_VENTA_NO_IMPUESTOS +((COST.Margendistribuidor * 0.01 + COST.GastosMarketing * 0.01 - COST.Comisión_Marca * 0.01) * S.PVP * (1 - S.IMPUESTOS / 100)) +COST.Costetransporte,2
-    ) AS Coste_Total
+    ) AS Coste_Total,
 
+    -- Variable Churn:
+    -- 1. Si DIAS_DESDE_ULTIMA_REVISION > 401 → churn = 1
+    -- 2. Si DIAS_DESDE_ULTIMA_REVISION = 0 Y Car_Age >= 1 → churn = 1
+    -- 3. Si DIAS_DESDE_ULTIMA_REVISION = 0 Y Car_Age < 1 → churn = 0
+    -- 4. En cualquier otro caso → churn = 0
 
-    --Variable Churn(1:dias_desde_ultima_revision >401, 0 :caso contrario)
-    ,CASE
+    CASE
         WHEN TRY_CAST(REPLACE(R.DIAS_DESDE_ULTIMA_REVISION, '.', '') AS INT) > 401 THEN 1
+        WHEN TRY_CAST(REPLACE(R.DIAS_DESDE_ULTIMA_REVISION, '.', '') AS INT) = 0 AND E.Car_Age >= 1 THEN 1
         ELSE 0
     END AS Churn
-   
+
+
 --Joins para la tabla fact(siempre left join sales con las demás tablas para no perder información)
 FROM [DATAEX].[001_sales] S
 LEFT JOIN [DATAEX].[010_forma_pago] FP 
@@ -105,6 +112,5 @@ LEFT JOIN [DATAEX].[006_producto] P
 LEFT JOIN [DATAEX].[007_COSTES] COST 
     ON P.Modelo = COST.Modelo
 
-oRDER BY  Customer_ID
 ;
 

@@ -3,6 +3,7 @@
 ## Índice
 - [Aspectos a tener en cuenta de las tablas para el análisis](#aspectos-a-tener-en-cuenta-de-las-tablas-para-el-análisis)
 - [Tratamiento de los nulos](#tratamiento-de-los-nulos)
+- [Cálculo del Churn](#cálculo-del-churn)
 
 ## Aspectos a tener en cuenta de las tablas para el análisis
 
@@ -71,5 +72,20 @@ Para asegurar la consistencia del modelo y evitar errores durante el análisis, 
 - `Car_Age`
   Se sustituyen los valores nulos por `0`. Dado que son pocos (459 de 58.049), se considera que no afectarán significativamente a los análisis agregados.
 
+## Cálculo del Churn
+
+Durante el cálculo de la variable **Churn**, se detectó que muchos registros presentaban valores vacíos o nulos en la columna `DIAS_DESDE_ULTIMA_REVISION`. Si estos valores se sustituyen automáticamente por `0`, podría producirse una **falsa interpretación** en el análisis, ya que el modelo asumiría que esos clientes han pasado recientemente por revisión, lo cual no siempre es cierto.
+
+**Estrategia aplicada`**
+
+Para mejorar la calidad del dato y evitar este sesgo, se ha seguido la siguiente lógica:
+
+- Si el valor de `DIAS_DESDE_ULTIMA_REVISION` es `0` y el cliente tiene una antigüedad (`Car_Age`) **mayor o igual a 1 año**, se asume que el cliente no ha pasado ninguna revisión durante al menos un año, por lo tanto se considera como **churn = 1**.
+
+- Si `DIAS_DESDE_ULTIMA_REVISION = 0` * `Car_Age < 1`, se considera que el coche aún es nuevo, por lo tanto **churn = 0**.
+
+- Para el resto de casos donde `DIAS_DESDE_ULTIMA_REVISION` tiene un valor válido (mayor que 0), se aplica la lógica habitual:
+  - Si `DIAS_DESDE_ULTIMA_REVISION > 401` → churn = 1
+  - En caso contrario → churn = 0
 
 # 02_Vision_Cliente
