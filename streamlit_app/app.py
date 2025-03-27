@@ -1,3 +1,5 @@
+
+#Liberias/Css/Arhivos/Data
 import streamlit as st
 import pandas as pd
 import seaborn as sns
@@ -14,7 +16,8 @@ def load_css(file_path="styles.css"):
 
 load_css()
 
-# ================== Pestaña 1: Explicación del CLV  ==================
+# ---Pestaña 1: Explicación del CLV--
+
 st.title("🔍 Customer Lifetime Value (CLV)")
 
 ## Introducción al Proyecto
@@ -75,47 +78,23 @@ st.write("""
 **Retención Alta pero Margen Negativo:** Cuando la retención es alta pero el margen es negativo, el cliente continuará generando pérdidas con el tiempo.
 """)
 
-## Matriz de Correlacion
-st.subheader(" Matriz de Correlación - Variables Más Influyentes en Churn")
+# Matriz de correlación - Sección
+st.subheader("📊 Matriz de Correlación - Churn y Variables Seleccionadas")
 
-# Variable mas imporantes
-variables_regresion = ["Edad_Media_Coche", "PVP_Medio", 'RENTA_MEDIA_ESTIMADA', "churn_medio_estimado"]
-df_selected = df[variables_regresion]
-
-
-corr_matrix = df_selected.corr()
-fig, ax = plt.subplots(figsize=(6, 5))
-sns.heatmap(corr_matrix, annot=True, cmap="Blues", fmt=".2f", linewidths=0.5, ax=ax)
-st.pyplot(fig)
-
-import pandas as pd
-import streamlit as st
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-# Cargar datos
-file_path = "../data/bi_cliente.csv"
-df = pd.read_csv(file_path)
-
-# Variables disponibles para la matriz de correlación
-variables_disponibles = ["Edad_Media_Coche", "PVP_Medio", 'RENTA_MEDIA_ESTIMADA', "churn_medio_estimado"]
-
-# Selección de variables por el usuario
-st.sidebar.header("🔹 Selección de Variables")
-variables_seleccionadas = st.sidebar.multiselect("Elige las variables a incluir:", variables_disponibles, default=variables_disponibles)
+# Crear un contenedor para la selección de variables
+with st.expander("🔹 Selecciona las variables para la matriz de correlación"):
+    variables_disponibles = ["Edad_Media_Coche", "PVP_Medio", 'RENTA_MEDIA_ESTIMADA', "churn_medio_estimado","Numero_Veces_Lead","Total_Quejas"]
+    variables_seleccionadas = st.multiselect("Elige las variables:", variables_disponibles, default=variables_disponibles)
 
 # Filtrar el dataframe con las variables seleccionadas
 df_selected = df[variables_seleccionadas]
-
-# Convertir a numérico en caso de valores erróneos
 for col in df_selected.columns:
     df_selected[col] = pd.to_numeric(df_selected[col], errors="coerce")
 
 # Calcular la matriz de correlación
 corr_matrix = df_selected.corr()
 
-# Mostrar la matriz de correlación en Streamlit
-st.subheader("📊 Matriz de Correlación - Variables Seleccionadas")
+# Mostrar la matriz de correlación en la misma sección
 fig, ax = plt.subplots(figsize=(6, 5))
 sns.heatmap(corr_matrix, annot=True, cmap="Blues", fmt=".2f", linewidths=0.5, ax=ax)
 ax.set_title("Matriz de Correlación - Churn y Variables Seleccionadas")
