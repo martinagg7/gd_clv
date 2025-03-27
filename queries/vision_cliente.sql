@@ -16,7 +16,6 @@ SELECT
 
 --MÉTRICAS AGREGRADAS POR CLIENTE(Calculadas a través fact)
 
-
 --1. ORIGEN Y CAPTACION
   -- origen_compra:canal principal de compra (internet, tienda, ambos o desconocido)
   CASE 
@@ -32,10 +31,12 @@ SELECT
   -- numero_veces_lead:número total de veces que fue registrado como lead
   SUM(f.Fue_Lead) AS Numero_Veces_Lead,
 
-
  -- 2.COMPORTAMIENTO DE COMPRA
   -- total_compras:número de vehiculos adquiridos
   COUNT(f.Customer_ID) AS Total_Compras,
+
+  --Modelos_Comprados:Modelos de coches comprados
+    STRING_AGG(p.Modelo, ', ') AS Modelos_Comprados,
 
   -- pvp_total: cantidad total gastada  en compras
   SUM(f.PVP) AS PVP_Total,
@@ -57,26 +58,26 @@ SELECT
         MAX(f.Sales_Date)
     ) AS Dias_Entre_Primera_Ultima_Compra,
 
-    -- dias_desde_ultima_compra:días desde la última compra
--- días desde la última compra (referencia fija: último día que se actualizó la base de datos BASE_DATE:2023-12-31) 
+  --ultima_compra:última fecha de compra
+   MAX(f.Sales_Date) AS Ultima_Compra,
+
+  -- días desde la última compra (referencia fija: último día que se actualizó la base de datos BASE_DATE:2023-12-31) 
     DATEDIFF(
         DAY,
         MAX(f.Sales_Date),
         '2023-12-31'
     ) AS Dias_Desde_Ultima_Compra,
 
-
   -- compra_finde_o_festivo:indica si se realizó alguna compra en fines de semana o festivos (1=si, 0=no)
   CASE 
     WHEN SUM(CASE WHEN t.FinDeSemana = 'VERDADERO' OR t.Festivo = 'VERDADERO' THEN 1 ELSE 0 END) > 0
       THEN 1 ELSE 0 
   END AS Compra_Finde_O_Festivo,
-
-
- --3.USO Y MANTENIMIENTO
+ --3.INFORMACION VEHICULO ULTIMA COMPRA
+ --4.USO Y MANTENIMIENTO
   -- edad_media_coche: promedio de edad de todos los coches del cliente
-	 AVG(f.Car_Age) AS Edad_Media_Coche,
-	
+   AVG(f.Car_Age) AS Edad_Media_Coche,
+  
   -- total_revisiones:total de revisiones o mantenimientos realizados
   SUM(f.Revisiones) AS Total_Revisiones,
 
@@ -92,7 +93,7 @@ SELECT
     -- dias_medio_en_taller: días promedio los coches de un cliente estuvieron en el taller
   AVG(f.DIAS_EN_TALLER) AS Dias_Medio_En_Taller,
 
- --4. SATISFACCION Y SERVICIO
+ --5. SATISFACCION Y SERVICIO
   -- total_quejas:número total de quejas registradas(Las sumamos porque como hay muchos valores null convertidos a 0,podríamos estar sesgando el resultado)
   SUM(CASE WHEN f.QUEJA = 'SI' THEN 1 ELSE 0 END) AS Total_Quejas,
 
@@ -108,7 +109,7 @@ SELECT
     ELSE 0 
   END AS Contrato_Seguro_Bateria,
 
-    -- COSTES Y RENTABILIDAD
+  -- COSTES Y RENTABILIDAD
   -- coste_medio_cliente:coste total medio por compra
   AVG(f.Coste_Total) AS Coste_Medio_Cliente,
 
@@ -122,11 +123,10 @@ SELECT
   AVG(f.Margen_eur) / NULLIF(AVG(f.Coste_Total), 0) AS Rentabilidad_Relativa , 
 
   -- churn:se toma el mínimo valor de esta columna si tiene más de un coche
-	  MIN(f.Churn) AS Churn_Cliente, 
+    MIN(f.Churn) AS Churn_Cliente, 
 
  -- Dias_Medios_Desde_Ultima_Revision:media dias que han pasado desde la ultima revision del cliente   
-	 AVG(f.DIAS_DESDE_ULTIMA_REVISION) AS Dias_Medios_Desde_Ultima_Revision
-
+   AVG(f.DIAS_DESDE_ULTIMA_REVISION) AS Dias_Medios_Desde_Ultima_Revision
 
 FROM [dwh_case1].[dbo].[dim_cliente] c
 LEFT JOIN [dwh_case1].[dbo].[dim_fact] f
@@ -134,6 +134,8 @@ LEFT JOIN [dwh_case1].[dbo].[dim_fact] f
 --LEFT JOIN fact_table con Tiempo (Para comprobar si las fehchas de venta son en festivos,findes,días laborales..)
 LEFT JOIN [dwh_case1].[dbo].[dim_tiempo] t
   ON f.Sales_Date = t.Date
+LEFT JOIN [dwh_case1].[dbo].[dim_prod] p 
+  ON f.Id_Producto = p.Id_Producto
 
 GROUP BY 
   c.Customer_ID,
