@@ -542,85 +542,85 @@ if menu == "Segmentación Clientes":
     else:
         st.warning("Selecciona al menos una métrica para visualizar la comparación entre clusters.")
     
-
+    st.markdown("### Estrategias a Futuro")
     st.write("""
-Este análisis identifica los clusters según su **Customer Lifetime Value (CLV)** y propone estrategias optimizadas para cada segmento de clientes.
-""")
-
-# Crear tabla con estilos
-table_html = """
-<style>
-    .styled-table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 16px;
-    }
-    .styled-table th, .styled-table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-    }
-    .styled-table th {
-        background-color: #1F4E79;
-        color: white;
-    }
-</style>
-
-<table class="styled-table">
-    <thead>
-        <tr>
-            <th>Cluster</th>
-            <th>CLV</th>
-            <th>Acción Recomendada</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><b>Clusters 2 y 4</b></td>
-            <td>Alto</td>
-            <td>Fidelización y Upselling</td>
-        </tr>
-        <tr>
-            <td><b>Clusters 1 y 3</b></td>
-            <td>Medio</td>
-            <td>Incentivar segunda compra</td>
-        </tr>
-        <tr>
-            <td><b>Clusters 0 y 5</b></td>
-            <td>Bajo/Negativo</td>
-            <td>Reducir costos o reenfocar estrategias</td>
-        </tr>
-    </tbody>
-</table>
-"""
-st.markdown(table_html, unsafe_allow_html=True)
-
-# Explicación detallada con expanders
-with st.expander("Clusters 2 y 4 → Clientes Premium"):
-    st.write("""
-    - **Característica:** Generan altos ingresos a largo plazo, tienen un margen positivo y realizan compras recurrentes.
-    - **Estrategias:**
-      - Programas VIP y recompensas por fidelidad.
-      - Cross-selling con productos complementarios.
-      - Servicio personalizado y atención prioritaria.
+    Este análisis identifica los clusters según su **Customer Lifetime Value (CLV)** y propone estrategias optimizadas para cada segmento de clientes.
     """)
 
-with st.expander("Clusters 1 y 3 → Clientes Potenciales"):
-    st.write("""
-    - **Característica:** Son rentables, pero su CLV es moderado, pueden aumentar su contribución si se estimulan las compras.
-    - **Estrategias:**
-      - Descuentos progresivos para incentivar recompra.
-      - Campañas de retargeting con promociones personalizadas.
-      - Ofrecer financiación para compras más grandes.
-    """)
+    # Crear tabla con estilos
+    table_html = """
+    <style>
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 16px;
+        }
+        .styled-table th, .styled-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .styled-table th {
+            background-color: #1F4E79;
+            color: white;
+        }
+    </style>
 
-with st.expander("Clusters 0 y 5 → Clientes No Rentables"):
-    st.write("""
-    - **Característica:** CLV bajo o negativo, generan pocos ingresos y pueden representar costos elevados en mantenimiento.
-    - **Estrategias:**
-      - Analizar por qué generan pérdidas y reducir costos.
-      - Ofertas específicas para mejorar su conversión.
-      - Evitar promociones costosas dirigidas a estos clientes.
-    """)
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Cluster</th>
+                <th>CLV</th>
+                <th>Acción Recomendada</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><b>Clusters 2 y 4</b></td>
+                <td>Alto</td>
+                <td>Fidelización y Upselling</td>
+            </tr>
+            <tr>
+                <td><b>Clusters 1 y 3</b></td>
+                <td>Medio</td>
+                <td>Incentivar segunda compra</td>
+            </tr>
+            <tr>
+                <td><b>Clusters 0 y 5</b></td>
+                <td>Bajo/Negativo</td>
+                <td>Reducir costos o reenfocar estrategias</td>
+            </tr>
+        </tbody>
+    </table>
+    """
+    st.markdown(table_html, unsafe_allow_html=True)
 
-st.success("Objetivo: Aumentar el valor de los clientes potenciales, retener a los clientes premium y optimizar recursos en clientes menos rentables.")
+    # Explicación detallada con expanders
+    with st.expander("Clusters 2 y 4 → Clientes Premium"):
+        st.write("""
+        - **Característica:** Generan altos ingresos a largo plazo, tienen un margen positivo y realizan compras recurrentes.
+        - **Estrategias:**
+        - Programas VIP y recompensas por fidelidad.
+        - Cross-selling con productos complementarios.
+        - Servicio personalizado y atención prioritaria.
+        """)
+
+    with st.expander("Clusters 1 y 3 → Clientes Potenciales"):
+        st.write("""
+        - **Característica:** Son rentables, pero su CLV es moderado, pueden aumentar su contribución si se estimulan las compras.
+        - **Estrategias:**
+        - Descuentos progresivos para incentivar recompra.
+        - Campañas de retargeting con promociones personalizadas.
+        - Ofrecer financiación para compras más grandes.
+        """)
+
+    with st.expander("Clusters 0 y 5 → Clientes No Rentables"):
+        st.write("""
+        - **Característica:** CLV bajo o negativo, generan pocos ingresos y pueden representar costos elevados en mantenimiento.
+        - **Estrategias:**
+        - Analizar por qué generan pérdidas y reducir costos.
+        - Ofertas específicas para mejorar su conversión.
+        - Evitar promociones costosas dirigidas a estos clientes.
+        """)
+
+    st.success("Objetivo: Aumentar el valor de los clientes potenciales, retener a los clientes premium y optimizar recursos en clientes menos rentables.")
