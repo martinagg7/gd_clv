@@ -14,7 +14,7 @@ from sklearn.cluster import KMeans
 import plotly.graph_objects as go
 
 #Archivos leer
-file_path = "../data/cliente_bi.csv"
+file_path = "cliente_bi.csv"
 df = pd.read_csv(file_path)
 #Estilos
 def apply_custom_styles():
@@ -513,7 +513,7 @@ if menu == "Segmentación Clientes":
    
 
     # Archivo con los datos
-    file_path = "../client_anlysis/df_final.csv"
+    file_path = "df_final.csv"
     df = pd.read_csv(file_path)
 
     # Diccionario de nombres de clusters
@@ -570,7 +570,7 @@ if menu == "Segmentación Clientes":
         
 
     # Cargar el archivo con las métricas por cluster
-    file_path = "../client_anlysis/df_cluster_comp.csv"  # Ajusta la ruta según sea necesario
+    file_path = "df_cluster_comp.csv"  # Ajusta la ruta según sea necesario
     df_cluster_comp = pd.read_csv(file_path)
 
     # Lista de métricas disponibles
