@@ -12,10 +12,25 @@ from sklearn.preprocessing import StandardScaler
 import seaborn as sns
 from sklearn.cluster import KMeans
 import plotly.graph_objects as go
+import os
 
-#Archivos leer
-file_path = "cliente_bi.csv"
-df = pd.read_csv(file_path)
+# Obtener la ruta del directorio actual donde está app.py
+current_dir = os.path.dirname(__file__)
+
+# Construir las rutas de los archivos CSV dentro de la misma carpeta
+file_cliente_bi = os.path.join(current_dir, "cliente_bi.csv")
+file_cluster_comp = os.path.join(current_dir, "df_cluster_comp.csv")
+file_final = os.path.join(current_dir, "df_final.csv")
+
+# Verificar si los archivos existen antes de cargarlos
+for file in [file_cliente_bi, file_cluster_comp, file_final]:
+    if not os.path.exists(file):
+        raise FileNotFoundError(f"⚠️ Archivo no encontrado: {file}")
+
+# Cargar los archivos CSV
+df = pd.read_csv(file_cliente_bi)
+df_cluster_comp = pd.read_csv(file_cluster_comp)
+df_final = pd.read_csv(file_final)
 #Estilos
 def apply_custom_styles():
     st.markdown("""
@@ -514,7 +529,7 @@ if menu == "Segmentación Clientes":
 
     # Archivo con los datos
     file_path = "df_final.csv"
-    df = pd.read_csv(file_path)
+    df_final = pd.read_csv(file_path)
 
     # Diccionario de nombres de clusters
     cluster_nombres = {
@@ -529,12 +544,12 @@ if menu == "Segmentación Clientes":
     if {"PC1", "PC2", "Cluster"}.issubset(df.columns):
         
         # Ordenar los clusters correctamente
-        df["Cluster"] = pd.Categorical(df["Cluster"], categories=[0, 1, 2, 3, 4, 5], ordered=True)
+        df_final["Cluster"] = pd.Categorical(df_final["Cluster"], categories=[0, 1, 2, 3, 4, 5], ordered=True)
 
         # Reemplazar los números por nombres en la columna Cluster
-        df["Cluster_Nombre"] = df["Cluster"].map(cluster_nombres)
+        df_final["Cluster_Nombre"] = df_final["Cluster"].map(cluster_nombres)
 
-        centroids = df.groupby("Cluster")[["PC1", "PC2"]].mean().reset_index()
+        centroids = df_final.groupby("Cluster")[["PC1", "PC2"]].mean().reset_index()
         centroids["Cluster_Nombre"] = centroids["Cluster"].map(cluster_nombres)
 
         # Definir colores personalizados para cada cluster
