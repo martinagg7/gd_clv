@@ -581,9 +581,7 @@ if menu == "Segmentación Clientes":
         st.plotly_chart(fig, use_container_width=True)
         
 
-    # Cargar el archivo con las métricas por cluster
-    file_path = "df_cluster_comp.csv"  # Ajusta la ruta según sea necesario
-    df_cluster_comp = pd.read_csv(file_path)
+   
 
     # Lista de métricas disponibles
     metricas_disponibles = list(df_cluster_comp.columns[1:])  # Excluir la columna 'Cluster'
