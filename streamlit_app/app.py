@@ -527,9 +527,6 @@ if menu == "Segmentación Clientes":
 
    
 
-    # Archivo con los datos
-    file_path = "df_final.csv"
-    df_final = pd.read_csv(file_path)
 
     # Diccionario de nombres de clusters
     cluster_nombres = {
