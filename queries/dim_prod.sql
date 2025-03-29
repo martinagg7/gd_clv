@@ -1,7 +1,6 @@
 --Tabla Producto: Con toda la información de los productos.
 --Se unen las tablas producto,categoría,costes y fuel.
 
-
 SELECT 
         --Producto
         producto.Id_Producto--PK
@@ -15,7 +14,7 @@ SELECT
 
         --Categoría
         ,categoria.Equipamiento
-        ,categoria.Grade_ID --Especifica el tipo de equipamiento(0-Low/1,2-Mid/3-Mid-High/4-High)
+        ,categoria.Grade_ID 
 
         --Costes
         ,costes.Margen

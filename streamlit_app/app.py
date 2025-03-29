@@ -17,11 +17,57 @@ import plotly.graph_objects as go
 file_path = "../data/cliente_bi.csv"
 df = pd.read_csv(file_path)
 #Estilos
-def load_css(file_path="styles.css"):
-    with open(file_path, "r") as f:
+def apply_custom_styles():
+    st.markdown("""
+    <style>
+        /* Estilos Generales */
+        body {
+            font-family: Arial, sans-serif;
+        }
 
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-load_css()
+        /* Estilo para Tablas */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #F5F5F5;
+        }
+
+        th {
+            background-color: #1F4E79;
+            color: white;
+            padding: 12px;
+            text-align: center;
+        }
+
+        td {
+            background-color: white;
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Estilos para Cards */
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Llamar a la función al inicio de la app
+apply_custom_styles()
+
 color_palette = ["#1F4E79", "#1F77B4", "#4A90E2", "#76A9FA"]
 
 # Barra de navegación para cambiar entre páginas
@@ -400,6 +446,7 @@ if menu == "Análisis CLV":
     - De media, la empresa espera ganar 7,270.50€ por cliente en los próximos 5 años, lo que representa una base sólida para la planificación financiera.
     - La mayoría de los clientes tienen un CLV positivo, lo que indica una rentabilidad general favorable.
     - Aunque solo 12.27% de los clientes tienen un CLV negativo, es crucial analizar qué factores llevan a estas pérdidas y cómo evitarlas con estrategias de fidelización.
+    - La empresa debería concentrar sus esfuerzos económicos en el 34.80% por ciento de los clientes que le generarán beneficios seguros dentro de 5 años.
     """)
 
 
@@ -469,11 +516,26 @@ if menu == "Segmentación Clientes":
     file_path = "../client_anlysis/df_final.csv"
     df = pd.read_csv(file_path)
 
+    # Diccionario de nombres de clusters
+    cluster_nombres = {
+        0: "Clientes No Rentables",
+        1: "Clientes de Alto Mantenimiento",
+        2: "Clientes Muy Rentables",
+        3: "Clientes Poco Rentables",
+        4: "Clientes Más Rentables",
+        5: "Clientes Estables"
+    }
+
     if {"PC1", "PC2", "Cluster"}.issubset(df.columns):
         
         # Ordenar los clusters correctamente
         df["Cluster"] = pd.Categorical(df["Cluster"], categories=[0, 1, 2, 3, 4, 5], ordered=True)
+
+        # Reemplazar los números por nombres en la columna Cluster
+        df["Cluster_Nombre"] = df["Cluster"].map(cluster_nombres)
+
         centroids = df.groupby("Cluster")[["PC1", "PC2"]].mean().reset_index()
+        centroids["Cluster_Nombre"] = centroids["Cluster"].map(cluster_nombres)
 
         # Definir colores personalizados para cada cluster
         cluster_colors = ["#1F4E79", "#1F77B4", "#4A90E2", "#76A9FA", "#E74C3C", "#F39C12"]
@@ -481,33 +543,32 @@ if menu == "Segmentación Clientes":
         # Mostrar leyenda manual con colores
         st.markdown("### Identificación de Clusters")
         legend_html = "".join(
-            [f"<span style='background-color:{color}; padding:5px 15px; margin:5px; display:inline-block; color:white; border-radius:5px;'>Cluster {i}</span>"
+            [f"<span style='background-color:{color}; padding:5px 15px; margin:5px; display:inline-block; color:white; border-radius:5px;'> {cluster_nombres[i]} </span>"
             for i, color in enumerate(cluster_colors)]
         )
         st.markdown(legend_html, unsafe_allow_html=True)
 
-        # Crear gráfico de dispersión
+        # Crear gráfico de dispersión con nombres de clusters
         fig = px.scatter(
-            df, x="PC1", y="PC2", color=df["Cluster"].astype(str),
+            df, x="PC1", y="PC2", color=df["Cluster_Nombre"],
             title="Segmentación de Clientes con Clusters y Centroides",
-            labels={"Cluster": "Cluster"},
+            labels={"Cluster_Nombre": "Segmento de Clientes"},
             opacity=0.7,
             color_discrete_sequence=cluster_colors
         )
 
-    
         # Ajustar diseño
         fig.update_layout(
             autosize=True,
-            width=1000,  
+            width=1200,  
             height=800,
-            legend_title_text="Clusters"
+            legend_title_text="Segmentos de Clientes"
         )
 
         # Mostrar gráfico interactivo en Streamlit
         st.plotly_chart(fig, use_container_width=True)
+        
 
-        # Cargar el archivo con las métricas por cluster
     # Cargar el archivo con las métricas por cluster
     file_path = "../client_anlysis/df_cluster_comp.csv"  # Ajusta la ruta según sea necesario
     df_cluster_comp = pd.read_csv(file_path)
@@ -515,7 +576,6 @@ if menu == "Segmentación Clientes":
     # Lista de métricas disponibles
     metricas_disponibles = list(df_cluster_comp.columns[1:])  # Excluir la columna 'Cluster'
 
-    # 🎯 SELECCIÓN DE MÉTRICAS → Ahora está ENCIMA del gráfico
     st.markdown("### Comparación de Métricas entre Clusters")
     metricas_seleccionadas = st.multiselect("Selecciona las métricas a comparar:", metricas_disponibles, default=["CLV_5_anos", "Margen_eur_Medio"])
 
@@ -527,10 +587,9 @@ if menu == "Segmentación Clientes":
         fig = px.bar(df_melted, x="Cluster", y="Valor", color="Métrica", barmode="group",
                     title="Comparación de Métricas entre Clusters",
                     labels={"Valor": "Valor Escalado", "Cluster": "Cluster"},
-                    width=800,  # ⬅ Hacemos este gráfico más grande también
-                    height=600)  # ⬅ Ajustamos altura
-
-        st.plotly_chart(fig, use_container_width=False)  # ⬅ Evita que el gráfico se haga pequeño
+                    width=800,  
+                    height=600)  
+        st.plotly_chart(fig, use_container_width=False)  
 
         # Explicación de la visualización
         st.markdown("""
@@ -541,6 +600,81 @@ if menu == "Segmentación Clientes":
         """)
     else:
         st.warning("Selecciona al menos una métrica para visualizar la comparación entre clusters.")
+    
+
+    # Definir los resúmenes de cada cluster
+    resumen_clusters = {
+        "0": {
+            "Titulo": "Clientes con Alto Coste y Baja Rentabilidad",
+            "Edad Media Coche": "Cercana a la media",
+            "PVP Medio": "Alto, gastan más en cada compra",
+            "Total Revisiones": "Menos revisiones que la media",
+            "Coste Medio Cliente": "Muy alto, pero con margen negativo",
+            "CLV 5 años": "Bajo, clientes poco rentables",
+            "Margen en Euros": "Negativo, la empresa pierde dinero con estos clientes"
+        },
+        "1": {
+            "Titulo": "Clientes de Alto Mantenimiento pero Baja Rentabilidad",
+            "Edad Media Coche": "Más alta, coches antiguos",
+            "PVP Medio": "Bajo, gastan menos por compra",
+            "Total Revisiones": "Muchas revisiones, clientes que cuidan su coche",
+            "Coste Medio Cliente": "Medio, pero con baja rentabilidad",
+            "CLV 5 años": "Cercano a la media",
+            "Margen en Euros": "Bajo, generan poca ganancia"
+        },
+        "2": {
+            "Titulo": "Clientes Muy Rentables con Vehículos Nuevos",
+            "Edad Media Coche": "Muy baja, coches nuevos",
+            "PVP Medio": "Más alto que la media",
+            "Total Revisiones": "Muy pocas revisiones, coches nuevos",
+            "Coste Medio Cliente": "Bajo, clientes eficientes",
+            "CLV 5 años": "Muy alto, clientes rentables",
+            "Margen en Euros": "Muy alto, generan grandes beneficios"
+        },
+        "3": {
+            "Titulo": "Clientes con Vehículos Nuevos pero Poco Rentables",
+            "Edad Media Coche": "La más baja, coches recién comprados",
+            "PVP Medio": "Más bajo que la media",
+            "Total Revisiones": "Casi ninguna revisión",
+            "Coste Medio Cliente": "Moderado, pero rentabilidad baja",
+            "CLV 5 años": "Bajo, baja rentabilidad futura",
+            "Margen en Euros": "Bajo, clientes con poco impacto en ganancias"
+        },
+        "4": {
+            "Titulo": "Clientes de Alto Valor y Frecuencia de Compra",
+            "Edad Media Coche": "Alta, coches más antiguos",
+            "PVP Medio": "Alto, clientes que compran vehículos de mayor valor",
+            "Total Revisiones": "Muchas revisiones, clientes fieles al taller",
+            "Coste Medio Cliente": "Bajo, clientes rentables",
+            "CLV 5 años": "Muy alto, clientes clave",
+            "Margen en Euros": "Muy alto, son los clientes más rentables"
+        },
+        "5": {
+            "Titulo": "Clientes Promedio y Estables",
+            "Edad Media Coche": "Ligeramente más alta que la media",
+            "PVP Medio": "Ligeramente bajo",
+            "Total Revisiones": "Similares a la media",
+            "Coste Medio Cliente": "Intermedio, sin impacto significativo",
+            "CLV 5 años": "Intermedio, clientes estables",
+            "Margen en Euros": "Intermedio, contribuyen a la rentabilidad general"
+        }
+    }
+
+    # Título de la sección
+    st.markdown("### Información Resumida por Cluster")
+
+    # Opciones del selectbox con una opción vacía por defecto
+    cluster_seleccionado = st.selectbox("Selecciona un Cluster", [""] + list(resumen_clusters.keys()))
+
+    # Mostrar información solo si se selecciona un cluster
+    if cluster_seleccionado:
+        st.markdown(f" **Resumen del Cluster {cluster_seleccionado}**")
+        cluster_info = resumen_clusters[cluster_seleccionado]
+
+        # Mostrar la información en formato de texto
+        for key, value in cluster_info.items():
+            st.write(f"**{key}:** {value}")
+    
     
     st.markdown("### Estrategias a Futuro")
     st.write("""

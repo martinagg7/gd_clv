@@ -1,4 +1,3 @@
-
 --Tabla Geografica:Con la información geográfica de las tiendas.
 --Se unen las tablas tienda,provincia y zona.
 

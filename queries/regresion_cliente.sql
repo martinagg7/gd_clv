@@ -1,3 +1,5 @@
+--regresion_cliente.sql:Para cada PVP se obtienen estadísticas como la edad media del cliente, margen bruto medio, coste total y más.
+--Se  calcula la tasa media de churn, que luego se analizará para encontrar la mejor regresión que prediga la retención de clientes.
 SELECT
     f.PVP,
     COUNT(*) AS Numero_Compras,

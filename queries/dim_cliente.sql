@@ -23,7 +23,7 @@ SELECT
     --Mosaic
     m.U,
     m.PROV,
-    m.PROV_INE,--PENSARME SI ELIMINAR
+    m.PROV_INE,
     m.Max_Mosaic,
     m.Max_Mosaic1,
     m.A,

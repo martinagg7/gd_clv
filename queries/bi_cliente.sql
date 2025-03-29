@@ -13,7 +13,7 @@ SELECT
     @b4 = MAX(CASE WHEN Variable = 'Revisiones_Medias' THEN Valor END)
 FROM [dwh_case1].[dbo].[Regresion_Coeficientes];
 
--- Calculamos churn, retención y CLV para cada cliente con límites
+-- Calculamos churn, retención y CLV para cada cliente 
 SELECT 
 	vc.Customer_ID,
     vc.Edad,
@@ -64,7 +64,8 @@ SELECT
     ))) AS retencion,
 
 
-    /**ANOTACIÓN**:como hay clientes con retención negativa y hemos limitado el valor entre [0,1], el CLV a 5 años 
+    /**ANOTACIÓN**:
+        como hay clientes con retención negativa y hemos limitado el valor entre [0,1], el CLV a 5 años 
         CLV_5_anos=0 cuando la retención es negativa,
     */
 

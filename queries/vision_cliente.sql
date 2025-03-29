@@ -17,6 +17,7 @@ SELECT
 --MÉTRICAS AGREGRADAS POR CLIENTE(Calculadas a través fact)
 
 --1. ORIGEN Y CAPTACION
+
   -- origen_compra:canal principal de compra (internet, tienda, ambos o desconocido)
   CASE 
     WHEN COUNT(DISTINCT f.Origen) = 2 THEN 'Ambos'
@@ -32,6 +33,7 @@ SELECT
   SUM(f.Fue_Lead) AS Numero_Veces_Lead,
 
  -- 2.COMPORTAMIENTO DE COMPRA
+
   -- total_compras:número de vehiculos adquiridos
   COUNT(f.Customer_ID) AS Total_Compras,
 
@@ -73,8 +75,9 @@ SELECT
     WHEN SUM(CASE WHEN t.FinDeSemana = 'VERDADERO' OR t.Festivo = 'VERDADERO' THEN 1 ELSE 0 END) > 0
       THEN 1 ELSE 0 
   END AS Compra_Finde_O_Festivo,
- --3.INFORMACION VEHICULO ULTIMA COMPRA
- --4.USO Y MANTENIMIENTO
+
+ --3.USO Y MANTENIMIENTO
+
   -- edad_media_coche: promedio de edad de todos los coches del cliente
    AVG(f.Car_Age) AS Edad_Media_Coche,
   
@@ -93,7 +96,8 @@ SELECT
     -- dias_medio_en_taller: días promedio los coches de un cliente estuvieron en el taller
   AVG(f.DIAS_EN_TALLER) AS Dias_Medio_En_Taller,
 
- --5. SATISFACCION Y SERVICIO
+ --5.SATISFACCION Y SERVICIO
+
   -- total_quejas:número total de quejas registradas(Las sumamos porque como hay muchos valores null convertidos a 0,podríamos estar sesgando el resultado)
   SUM(CASE WHEN f.QUEJA = 'SI' THEN 1 ELSE 0 END) AS Total_Quejas,
 
@@ -109,7 +113,7 @@ SELECT
     ELSE 0 
   END AS Contrato_Seguro_Bateria,
 
-  -- COSTES Y RENTABILIDAD
+  -- 6.COSTES Y RENTABILIDAD
   -- coste_medio_cliente:coste total medio por compra
   AVG(f.Coste_Total) AS Coste_Medio_Cliente,
 

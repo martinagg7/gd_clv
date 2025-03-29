@@ -5,7 +5,7 @@
 - [Tratamiento de los nulos](#tratamiento-de-los-nulos)
 - [Cálculo del Churn](#cálculo-del-churn)
 
-## Aspectos a tener en cuenta de las tablas para el análisis
+
 
 ## Aspectos a tener en cuenta de las tablas para el análisis
 
@@ -31,8 +31,6 @@ Existen una serie de variables que pueden dar lugar a confusión durante el aná
   - `DIAS_EN_TALLER`  
   - `DIAS_DESDE_LA_ULTIMA_ENTRADA_TALLER`  
   también toman el valor `0` cuando no hay ninguna entrada registrada en el taller. No significa que el cliente haya estado cero días, sino que directamente no ha tenido actividad relacionada con el taller.
-
-
 
 
 ## Tratamiento de los nulos
@@ -63,8 +61,6 @@ Para asegurar la consistencia del modelo y evitar errores durante el análisis, 
 - `DIAS_EN_TALLER` y `DIAS_DESDE_LA_ULTIMA_ENTRADA_TALLER`
   Se sustituyen por `0`. Si el cliente no ha pasado por el taller, se considera como cero días, lo que es coherente con los datos asociados.
 
-- `DIAS_DESDE_ULTIMA_REVISION`
-  Se sustituye por `0` cuando coincide con `Revisiones = 0` y `Km_medio_por_revision = 0`, lo que indica que no ha realizado ninguna revisión.
 
 - `QUEJA`
   Se sustituyen los valores nulos por `'NA'`. Esto permite distinguir entre “no se ha quejado” (`'NO'`) y “no se tiene información” (`'NA'`), sin falsear los análisis de quejas.
@@ -74,4 +70,75 @@ Para asegurar la consistencia del modelo y evitar errores durante el análisis, 
 
 ## Cálculo del Churn
 
-Durante el cálculo de la variable **Churn**, se detectó que muchos registros presentaban valores vacíos o nulos en la columna `DIAS_DESDE_ULTIMA_REVISION`. Si estos valores se c
+La variable **Churn** indica si un cliente ha dejado de realizar revisiones y, por tanto, tiene una alta probabilidad de no volver a comprar.  
+Se ha detectado que muchos registros tienen valores `0` en la columna `DIAS_DESDE_ULTIMA_REVISION`, lo que puede generar confusión.  
+Para resolverlo, se ha definido la siguiente estrategia:
+
+- **Clientes con más de 401 días sin revisiones** → Se consideran como **Churn (1)**.  
+- **Clientes con 0 días desde la última revisión y un coche con más de 1 año** → También se consideran **Churn (1)**, ya que han pasado dos años o más y aún no se han tenido noticias del cliente.
+- **Clientes con 0 días desde la última revisión y un coche de menos de 1 año** → Se consideran **activos (0)**, ya que pueden estar en su período inicial de uso.  
+- **Todos los demás casos** → Se consideran **activos (0)**.  
+
+En el futuro, sería recomendable analizar en más profundidad los datos y probar otras estrategias para manejar los valores nulos,  
+como imputaciones basadas en patrones históricos o modelos predictivos para determinar la mejor opción.  
+
+---
+# 02_Vision_Cliente
+
+## Índice
+- [Medidas descriptivas del cliente](#medidas-descriptivas-del-cliente)
+- [Origen y captación](#origen-y-captación)
+- [Comportamiento de compra](#comportamiento-de-compra)
+- [Uso y mantenimiento](#uso-y-mantenimiento)
+- [Satisfacción y servicio](#satisfacción-y-servicio)
+- [Costes y rentabilidad](#costes-y-rentabilidad)
+- [Churn y revisiones](#churn-y-revisiones)
+
+## **Medidas descriptivas del cliente**  
+Información básica del cliente:  
+- **Edad**  
+- **Género**  
+- **Renta media estimada**  
+- **Provincia y ubicación (lat, lon)**  
+
+## **Origen y captación**  
+- **Origen_Compra**: Canal de compra (Internet, Tienda o Ambos).  
+- **Fue_Lead_Alguna_Vez**: Si fue registrado como lead alguna vez (1 = sí, 0 = no).  
+- **Numero_Veces_Lead**: Número de veces que fue lead.  
+
+## **Comportamiento de compra**  
+- **Total_Compras**: Cantidad de vehículos comprados.  
+- **Modelos_Comprados**: Modelos adquiridos.  
+- **PVP_Total**: Suma del precio de venta de todas sus compras.  
+- **PVP_Medio**: Precio medio gastado en cada compra.  
+- **PVP_Diferencia**: Diferencia entre la compra más cara y la más barata.  
+- **Dias_Entre_Primera_Ultima_Compra**: Días entre la primera y la última compra.  
+- **Ultima_Compra**: Fecha de la última compra.  
+- **Dias_Desde_Ultima_Compra**: Días desde la última compra hasta la fecha de referencia.  
+- **Compra_Finde_O_Festivo**: Si alguna compra fue en fin de semana o festivo (1 = sí, 0 = no).  
+
+## **Uso y mantenimiento**  
+- **Edad_Media_Coche**: Edad promedio de los coches comprados.  
+- **Total_Revisiones**: Cantidad total de revisiones realizadas.  
+- **Km_Medio_por_Revision**: Promedio de kilómetros recorridos por revisión.  
+- **Tuvo_Mantenimiento_Gratuito**: Si recibió mantenimiento gratuito alguna vez (1 = sí, 0 = no).  
+- **Dias_Medio_En_Taller**: Promedio de días en taller por coche.  
+
+## **Satisfacción y servicio**  
+- **Total_Quejas**: Número total de quejas registradas.  
+- **Compra_Tienda_Unica**: Si todas sus compras fueron en la misma tienda (1 = sí, 0 = no).  
+- **Contrato_Seguro_Bateria**: Si alguna vez contrató seguro de batería (1 = sí, 0 = no).  
+
+## **Costes y rentabilidad**  
+- **Coste_Medio_Cliente**: Promedio del coste total por compra.  
+- **Margen_Bruto_Medio**: Beneficio teórico promedio antes de restar costes.  
+- **Margen_Eur_Medio**: Beneficio neto promedio después de restar costes.  
+- **Rentabilidad_Relativa**: Relación entre beneficio neto y coste total, calculada como:  
+  \[
+  \text{Rentabilidad} = \frac{\text{Margen Eur Medio}}{\text{Coste Medio Cliente}}
+  \]
+  Si el coste es 0, se evita la división para no generar errores.  
+
+## **Churn y revisiones**  
+- **Churn_Cliente**: Si el cliente ha dejado de comprar (1 = sí, 0 = no).  
+- **Dias_Medios_Desde_Ultima_Revision**: Días promedio desde su última revisión.  
