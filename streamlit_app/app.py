@@ -523,63 +523,62 @@ if menu == "Segmentación Clientes":
     Estos grupos serán analizados en detalle a continuación para comprender más fondo el comportamiento de cada grupo
     """)
 
+    # Diccionario de nombres de clusters
 
+     # Diccionario de nombres de clusters
+    cluster_nombres = {
+         0: "Clientes No Rentables",
+         1: "Clientes de Alto Mantenimiento",
+         2: "Clientes Muy Rentables",
+         3: "Clientes Poco Rentables",
+         4: "Clientes Más Rentables",
+         5: "Clientes Estables"
+     }
+ 
+    
+ 
+         # Ordenar los clusters correctamente
+    df_final["Cluster"] = pd.Categorical(df_final["Cluster"], categories=[0, 1, 2, 3, 4, 5], ordered=True)
+ 
+         # Reemplazar los números por nombres en la columna Cluster
+    df_final["Cluster_Nombre"] = df_final["Cluster"].map(cluster_nombres)
+ 
+  
+         # Definir colores personalizados para cada cluster
+    cluster_colors = ["#1F4E79", "#1F77B4", "#4A90E2", "#76A9FA", "#E74C3C", "#F39C12"]
+ 
+         # Mostrar leyenda manual con colores
+    st.markdown("### Identificación de Clusters")
+    legend_html = "".join(
+             [f"<span style='background-color:{color}; padding:5px 15px; margin:5px; display:inline-block; color:white; border-radius:5px;'> {cluster_nombres[i]} </span>"
+             for i, color in enumerate(cluster_colors)]
+         )
+    st.markdown(legend_html, unsafe_allow_html=True)
+ 
+         # Crear gráfico de dispersión con nombres de clusters
+    fig = px.scatter(
+             df_final, x="PC1", y="PC2", color=df_final["Cluster_Nombre"],
+             title="Segmentación de Clientes con Clusters y Centroides",
+             labels={"Cluster_Nombre": "Segmento de Clientes"},
+             opacity=0.7,
+             color_discrete_sequence=cluster_colors
+         )
+ 
+         # Ajustar diseño
+    fig.update_layout(
+             autosize=True,
+             width=1200,  
+             height=800,
+             legend_title_text="Segmentos de Clientes"
+         )
+ 
+         # Mostrar gráfico interactivo en Streamlit
+    st.plotly_chart(fig, use_container_width=True)
 
    
 
 
-    # Diccionario de nombres de clusters
-    cluster_nombres = {
-        0: "Clientes No Rentables",
-        1: "Clientes de Alto Mantenimiento",
-        2: "Clientes Muy Rentables",
-        3: "Clientes Poco Rentables",
-        4: "Clientes Más Rentables",
-        5: "Clientes Estables"
-    }
-
-    if {"PC1", "PC2", "Cluster"}.issubset(df.columns):
-        
-        # Ordenar los clusters correctamente
-        df_final["Cluster"] = pd.Categorical(df_final["Cluster"], categories=[0, 1, 2, 3, 4, 5], ordered=True)
-
-        # Reemplazar los números por nombres en la columna Cluster
-        df_final["Cluster_Nombre"] = df_final["Cluster"].map(cluster_nombres)
-
-        centroids = df_final.groupby("Cluster")[["PC1", "PC2"]].mean().reset_index()
-        centroids["Cluster_Nombre"] = centroids["Cluster"].map(cluster_nombres)
-
-        # Definir colores personalizados para cada cluster
-        cluster_colors = ["#1F4E79", "#1F77B4", "#4A90E2", "#76A9FA", "#E74C3C", "#F39C12"]
-        
-        # Mostrar leyenda manual con colores
-        st.markdown("### Identificación de Clusters")
-        legend_html = "".join(
-            [f"<span style='background-color:{color}; padding:5px 15px; margin:5px; display:inline-block; color:white; border-radius:5px;'> {cluster_nombres[i]} </span>"
-            for i, color in enumerate(cluster_colors)]
-        )
-        st.markdown(legend_html, unsafe_allow_html=True)
-
-        # Crear gráfico de dispersión con nombres de clusters
-        fig = px.scatter(
-            df, x="PC1", y="PC2", color=df["Cluster_Nombre"],
-            title="Segmentación de Clientes con Clusters y Centroides",
-            labels={"Cluster_Nombre": "Segmento de Clientes"},
-            opacity=0.7,
-            color_discrete_sequence=cluster_colors
-        )
-
-        # Ajustar diseño
-        fig.update_layout(
-            autosize=True,
-            width=1200,  
-            height=800,
-            legend_title_text="Segmentos de Clientes"
-        )
-
-        # Mostrar gráfico interactivo en Streamlit
-        st.plotly_chart(fig, use_container_width=True)
-        
+   
 
    
 
